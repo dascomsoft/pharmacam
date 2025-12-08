@@ -1,0 +1,307 @@
+// import pharmaciesData from '../data/pharmacies.json';
+
+// /**
+//  * Recherche des pharmacies par ville
+//  * @param {string} ville - 'Yaoundé' ou 'Douala'
+//  * @returns {Array} Liste des pharmacies
+//  */
+// export function getPharmaciesByCity(ville) {
+//   return pharmaciesData.filter(pharmacy => 
+//     pharmacy.ville.toLowerCase() === ville.toLowerCase()
+//   );
+// }
+
+// /**
+//  * Trouve les pharmacies les plus proches
+//  * @param {number} lat - Latitude utilisateur
+//  * @param {number} lng - Longitude utilisateur
+//  * @param {number} limit - Nombre max de résultats
+//  * @returns {Array} Pharmacies triées par distance
+//  */
+// export function getNearbyPharmacies(lat, lng, limit = 5) {
+//   return pharmaciesData
+//     .map(pharmacy => {
+//       const distance = calculateDistance(lat, lng, pharmacy.lat, pharmacy.lng);
+//       return { ...pharmacy, distance };
+//     })
+//     .sort((a, b) => a.distance - b.distance)
+//     .slice(0, limit);
+// }
+
+// /**
+//  * Calcule la distance entre deux points (en mètres)
+//  * Formule de Haversine
+//  */
+// function calculateDistance(lat1, lon1, lat2, lon2) {
+//   const R = 6371000; // Rayon de la Terre en mètres
+//   const φ1 = lat1 * Math.PI / 180;
+//   const φ2 = lat2 * Math.PI / 180;
+//   const Δφ = (lat2 - lat1) * Math.PI / 180;
+//   const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+//   const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+//             Math.cos(φ1) * Math.cos(φ2) *
+//             Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+//   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+//   return Math.round(R * c); // Distance en mètres
+// }
+
+// /**
+//  * Analyse une requête vocale
+//  * @param {string} query - Requête utilisateur
+//  * @returns {Object} Informations extraites
+//  */
+// export function analyzeQuery(query) {
+//   const queryLower = query.toLowerCase();
+  
+//   return {
+//     ville: queryLower.includes('douala') ? 'Douala' : 
+//            queryLower.includes('yaoundé') || queryLower.includes('yaounde') ? 'Yaoundé' : null,
+//     quartier: extractQuartier(queryLower),
+//     type: queryLower.includes('garde') || queryLower.includes('nuit') ? 'urgence' : 'normal',
+//     medicament: extractMedicament(queryLower)
+//   };
+// }
+
+// function extractQuartier(query) {
+//   const quartiers = ['bastos', 'mendong', 'nsam', 'akwa', 'bonamoussadi', 'bonabéri'];
+//   return quartiers.find(quartier => query.includes(quartier)) || null;
+// }
+
+// function extractMedicament(query) {
+//   const medicaments = ['paracétamol', 'aspirine', 'doliprane', 'ibuprofène', 'sirop'];
+//   return medicaments.find(med => query.includes(med)) || null;
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// src/lib/pharmacies.js
+import pharmaciesData from '../data/pharmacies.json';
+
+/**
+ * Recherche des pharmacies par ville
+ */
+export function getPharmaciesByCity(ville) {
+  return pharmaciesData.filter(pharmacy => 
+    pharmacy.ville.toLowerCase() === ville.toLowerCase()
+  );
+}
+
+/**
+ * Trouve les pharmacies les plus proches
+ */
+export function getNearbyPharmacies(lat, lng, limit = 5) {
+  return pharmaciesData
+    .map(pharmacy => {
+      const distance = calculateDistance(lat, lng, pharmacy.lat, pharmacy.lng);
+      return { ...pharmacy, distance };
+    })
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, limit);
+}
+
+/**
+ * Calcule la distance entre deux points (en mètres)
+ */
+export function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371000; // Rayon de la Terre en mètres
+  const φ1 = lat1 * Math.PI / 180;
+  const φ2 = lat2 * Math.PI / 180;
+  const Δφ = (lat2 - lat1) * Math.PI / 180;
+  const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+  const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return Math.round(R * c); // Distance en mètres
+}
+
+/**
+ * Analyse une requête vocale
+ */
+export function analyzeQuery(query) {
+  const queryLower = query.toLowerCase();
+  
+  return {
+    ville: queryLower.includes('douala') ? 'Douala' : 
+           queryLower.includes('yaoundé') || queryLower.includes('yaounde') ? 'Yaoundé' : null,
+    quartier: extractQuartier(queryLower),
+    type: queryLower.includes('garde') || queryLower.includes('nuit') ? 'urgence' : 'normal',
+    medicament: extractMedicament(queryLower),
+    keywords: extractKeywords(queryLower)
+  };
+}
+
+function extractQuartier(query) {
+  const quartiers = [
+    'bastos', 'mendong', 'nsam', 'akwa', 'bonamoussadi', 'bonabéri',
+    'essomba', 'eleveurs', 'awae', 'tsinga', 'nkolndongo', 'briqueterie',
+    'mvog-mbi', 'obili', 'mvolyé', 'essos', 'madagascar', 'etoudi',
+    'ngousso', 'ahala', 'emombo', 'odza', 'emana', 'santa barbara',
+    'centre-ville', 'lac', 'messa', 'mballa', 'biteng', 'deido',
+    'logbessou', 'new bell', 'cite sic', 'bali', 'logpom', 'ndogbong',
+    'makepe', 'bassa'
+  ];
+  
+  for (const quartier of quartiers) {
+    if (query.includes(quartier)) {
+      return quartier;
+    }
+  }
+  return null;
+}
+
+function extractMedicament(query) {
+  const medicaments = [
+    'paracétamol', 'aspirine', 'doliprane', 'ibuprofène', 'sirop',
+    'antibiotique', 'vitamine', 'antidouleur', 'fièvre', 'toux',
+    'diabète', 'tension', 'asthme', 'allergie'
+  ];
+  
+  for (const med of medicaments) {
+    if (query.includes(med)) {
+      return med;
+    }
+  }
+  return null;
+}
+
+function extractKeywords(query) {
+  const keywords = [
+    'lac', 'centre', 'carrefour', 'marché', 'stade', 'cathédrale',
+    'mosquée', 'hôpital', 'clinique', 'urgence', 'nuit', 'soir',
+    'ouverte', 'fermé', 'proche', 'près', 'distance'
+  ];
+  
+  const found = [];
+  for (const keyword of keywords) {
+    if (query.includes(keyword)) {
+      found.push(keyword);
+    }
+  }
+  return found;
+}
+
+/**
+ * Recherche intelligente dans les pharmacies
+ */
+export function searchPharmacies(query, city, userLocation = null) {
+  const queryLower = query.toLowerCase();
+  const cityPharmacies = getPharmaciesByCity(city);
+  
+  if (cityPharmacies.length === 0) {
+    return [];
+  }
+  
+  let results = [...cityPharmacies];
+  
+  // 1. Filtrer par quartier
+  const quartier = extractQuartier(queryLower);
+  if (quartier) {
+    results = results.filter(p => 
+      p.quartier.toLowerCase().includes(quartier) ||
+      p.adresse.toLowerCase().includes(quartier) ||
+      p.nom.toLowerCase().includes(quartier)
+    );
+  }
+  
+  // 2. Filtrer par mot-clé dans le nom/adresse
+  const keywords = extractKeywords(queryLower);
+  if (keywords.length > 0 && results.length > 10) {
+    results = results.filter(p => {
+      const searchText = (p.nom + ' ' + p.adresse + ' ' + p.quartier).toLowerCase();
+      return keywords.some(keyword => searchText.includes(keyword));
+    });
+  }
+  
+  // 3. Filtrer par "garde" ou "nuit"
+  if (queryLower.includes('garde') || queryLower.includes('nuit')) {
+    results = results.filter(p => p.garde_24h === true);
+  }
+  
+  // 4. Ajouter les distances si localisation disponible
+  if (userLocation) {
+    results = results.map(p => ({
+      ...p,
+      distance: calculateDistance(userLocation.lat, userLocation.lng, p.lat, p.lng)
+    }));
+  }
+  
+  // 5. Trier (garde 24h > distance > note)
+  results.sort((a, b) => {
+    // Priorité 1: pharmacies de garde 24h
+    if (a.garde_24h && !b.garde_24h) return -1;
+    if (!a.garde_24h && b.garde_24h) return 1;
+    
+    // Priorité 2: distance (si disponible)
+    if (a.distance && b.distance) return a.distance - b.distance;
+    
+    // Priorité 3: note (si disponible)
+    if (a.note && b.note) return b.note - a.note;
+    
+    return 0;
+  });
+  
+  return results.slice(0, 5); // Retourner max 5 résultats
+}

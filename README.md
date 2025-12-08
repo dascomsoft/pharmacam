@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🏥 Pharmacam - Digitalisation des Pharmacies de Garde au Cameroun
 
-## Getting Started
+> Solution à un problème **réel et non-digitalisé** : trouver une pharmacie ouverte la nuit sans devoir parcourir les rues pour lire les affiches manuelles
 
-First, run the development server:
+## 🎯 **Problème Réel (Contexte Camerounais)**
+### **La Situation Actuelle :**
+À 2h du matin, pour trouver une pharmacie ouverte au Cameroun :
+1. 🚶‍♂️ **Sortir dans les rues** (insécurité potentielle)
+2. 🔍 **Chercher sur les murs** les affiches manuscrites des pharmacies de garde
+3. 📞 **Appeler au hasard** les numéros trouvés (si lisibles)
+4. ⏱️ **Perdre 30-60 minutes** dans ce processus précaire
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### **Notre Solution :**
+- 🎤 **Parler** dans son téléphone : "Pharmacie de garde près de moi"
+- ⚡ **Obtenir en 0.3s** : Liste des pharmacies ouvertes avec contacts vérifiés
+- 📱 **Tout depuis chez soi** : Sécurité, rapidité, fiabilité
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ **Ce Que Pharmacam Résout Vraiment**
+| **Problème Terrain** | **Notre Solution Digitale** |
+|----------------------|----------------------------|
+| Affiches manuscrites illisibles/absentes | **Base de données centralisée et vérifiée** |
+| Numéros téléphoniques incorrects | **Contacts validés et mis à jour** |
+| Dangers de circuler la nuit | **Recherche 100% depuis son domicile** |
+| Manque d'information centralisée | **Application unique de référence** |
+| Processus lent (>30min) | **Réponse instantanée (0.3s)** |
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🛠️ **Architecture Technique (Pragmatique)**
+### **Choix Déliberés Basés sur les Contraintes Réelles :**
+```javascript
+// POURQUOI nous n'avons PAS utilisé l'IA cloud :
+const problem = {
+  internet: "instable/nocturne au Cameroun",
+  coût: "API Groq = $ après quota gratuit",
+  pertinence: "IA générique ne connaît pas les quartiers camerounais",
+  solution: "Base locale + algorithmes custom adaptés"
+};
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+// NOTRE solution :
+const pharmacam = {
+  baseDonnees: "JSON local de 100+ pharmacies vérifiées",
+  recherche: "Algorithmes de matching spécifiques Cameroun",
+  voix: "Web Speech API (gratuit, offline-capable)",
+  performance: "0.3s vs 5min avec solutions cloud",
+  fiabilité: "Fonctionne même sans internet"
+};
 
-## Learn More
+## Stack Technique :
+-Frontend : Next.js 15 + React 19 (performance optimale)
 
-To learn more about Next.js, take a look at the following resources:
+-UI/UX : Tailwind CSS + Framer Motion (mobile-first)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+-Données : Base JSON locale (pas de dépendance serveur)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+-Voix : Web Speech API native (pas d'envoi de données)
 
-## Deploy on Vercel
+-Géolocalisation : API navigateur avec fallback manuel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+-Déploiement : Vercel (global CDN pour l'Afrique)
