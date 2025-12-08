@@ -2,7 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Styles de base */
+/* Styles personnalisés */
 body {
-  @apply bg-gray-900 text-white;
+  @apply bg-secondary text-white;
+}
+
+.glow-border {
+  box-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
 }
