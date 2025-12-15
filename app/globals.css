@@ -3,10 +3,66 @@
 @tailwind utilities;
 
 /* Styles personnalisés */
-body {
+/* body {
   @apply bg-secondary text-white;
 }
 
 .glow-border {
   box-shadow: 0 0 20px rgba(249, 115, 22, 0.5);
+} */
+
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 15, 23, 42;
+  --background-end-rgb: 0, 0, 0;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  min-height: 100vh;
+}
+
+/* Mobile optimizations */
+@layer utilities {
+  .safe-area-padding {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Empêche le zoom sur iOS */
+  @media screen and (max-width: 768px) {
+    input, select, textarea {
+      font-size: 16px !important;
+    }
+  }
+}
+
+/* Animations personnalisées */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.glow-border {
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+}
+
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }

@@ -1,0 +1,264 @@
+name: 🏥 Mise à jour quotidienne des pharmacies de garde
+
+on:
+  schedule:
+    - cron: '0 7 * * *'  # Tous les jours à 7h UTC (8h heure Cameroun)
+  workflow_dispatch:     # Déclenchement manuel
+  push:
+    branches: [ main ]
+    paths:
+      - 'scripts/scrape-gardes-*.js'
+
+jobs:
+  scrape-and-update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+      
+    steps:
+      - name: 🔄 Synchroniser avec le dépôt
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🟢 Configuration Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'package.json'
+
+      - name: 📦 Installation des dépendances
+        run: |
+          echo "📅 Date: $(date)"
+          echo "🔄 Installation des dépendances..."
+          npm ci --only=production
+          echo "✅ Dépendances installées"
+          npm list --depth=0
+
+      - name: 🚀 Exécution du scraper
+        id: scrape
+        run: |
+          echo "🎯 Démarrage du scraping des pharmacies de garde..."
+          echo "🌐 Source: https://www.dochelp-cm.org"
+          
+          # Exécuter le scraper
+          START_TIME=$(date +%s)
+          node scripts/scrape-gardes-optimized.js
+          EXIT_CODE=$?
+          END_TIME=$(date +%s)
+          DURATION=$((END_TIME - START_TIME))
+          
+          echo "⏱️  Durée d'exécution: ${DURATION} secondes"
+          
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo "❌ Le scraper a échoué avec le code: $EXIT_CODE"
+            exit 1
+          fi
+          
+          echo "✅ Scraping terminé avec succès"
+
+      - name: 📊 Analyse des données générées
+        id: analyze
+        run: |
+          echo "=== 📈 ANALYSE DES DONNÉES ==="
+          
+          # Vérifier l'existence du fichier
+          if [ ! -f "public/data/gardes_du_jour.json" ]; then
+            echo "❌ ERREUR: Fichier non généré"
+            exit 1
+          fi
+          
+          # Taille du fichier
+          FILE_SIZE=$(wc -c < "public/data/gardes_du_jour.json")
+          echo "📁 Taille du fichier: ${FILE_SIZE} octets"
+          
+          # Nombre de pharmacies
+          PHARMACIES_COUNT=$(node -e "
+            try {
+              const data = require('./public/data/gardes_du_jour.json');
+              console.log(data.total || data.pharmacies?.length || 0);
+            } catch (e) {
+              console.log('0');
+              process.exit(1);
+            }
+          ")
+          
+          echo "🏥 Nombre de pharmacies: ${PHARMACIES_COUNT}"
+          
+          # Taux de téléphones
+          PHONE_RATE=$(node -e "
+            try {
+              const data = require('./public/data/gardes_du_jour.json');
+              const withPhone = data.pharmacies.filter(p => p.tel && p.tel !== 'Non listé').length;
+              const total = data.pharmacies.length;
+              const rate = total > 0 ? Math.round((withPhone / total) * 100) : 0;
+              console.log(rate);
+            } catch (e) {
+              console.log('0');
+            }
+          ")
+          
+          echo "📞 Taux de téléphones: ${PHONE_RATE}%"
+          
+          # Période
+          PERIODE=$(node -e "
+            try {
+              const data = require('./public/data/gardes_du_jour.json');
+              console.log(data.periode || 'Non spécifiée');
+            } catch (e) {
+              console.log('Erreur');
+            }
+          ")
+          
+          echo "📅 Période: ${PERIODE}"
+          
+          # Nombre de régions
+          REGIONS_COUNT=$(node -e "
+            try {
+              const data = require('./public/data/gardes_du_jour.json');
+              const regions = new Set(data.pharmacies.map(p => p.region).filter(r => r));
+              console.log(regions.size);
+            } catch (e) {
+              console.log('0');
+            }
+          ")
+          
+          echo "🌍 Régions couvertes: ${REGIONS_COUNT}"
+          
+          # Critères de validation
+          if [ "${PHARMACIES_COUNT}" -lt 10 ]; then
+            echo "⚠️  ALERTE: Peu de pharmacies trouvées (< 10)"
+            echo "quality=low" >> $GITHUB_OUTPUT
+          elif [ "${PHARMACIES_COUNT}" -eq 0 ]; then
+            echo "❌ ERREUR CRITIQUE: Aucune pharmacie trouvée"
+            exit 1
+          elif [ "${PHONE_RATE}" -lt 50 ]; then
+            echo "⚠️  ALERTE: Taux de téléphones faible (< 50%)"
+            echo "quality=medium" >> $GITHUB_OUTPUT
+          else
+            echo "✅ Données de haute qualité"
+            echo "quality=high" >> $GITHUB_OUTPUT
+          fi
+          
+          echo "::set-output name=pharmacies_count::${PHARMACIES_COUNT}"
+          echo "::set-output name=phone_rate::${PHONE_RATE}"
+          echo "::set-output name=period::${PERIODE}"
+
+      - name: 💾 Sauvegarde des données
+        if: success()
+        run: |
+          echo "=== 💾 SAUVEGARDE ==="
+          
+          # Créer un backup
+          TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+          BACKUP_DIR="public/data/backups"
+          BACKUP_FILE="${BACKUP_DIR}/gardes_${TIMESTAMP}.json"
+          
+          mkdir -p "${BACKUP_DIR}"
+          cp "public/data/gardes_du_jour.json" "${BACKUP_FILE}"
+          
+          echo "📦 Backup créé: ${BACKUP_FILE}"
+          
+          # Garder seulement les 7 derniers backups
+          ls -t "${BACKUP_DIR}"/*.json | tail -n +8 | xargs -r rm -f
+          
+          echo "🗑️  Anciens backups nettoyés (gardés: 7 derniers)"
+
+      - name: 🔍 Vérification des changements
+        id: check_changes
+        run: |
+          echo "=== 🔍 DÉTECTION DES CHANGEMENTS ==="
+          
+          # Vérifier les changements
+          git status
+          git diff --name-only
+          
+          if git diff --quiet public/data/gardes_du_jour.json; then
+            echo "🔄 Aucun changement dans les données"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "📝 Changements détectés dans le fichier JSON"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            
+            # Afficher le diff
+            echo "Différence:"
+            git diff --stat public/data/gardes_du_jour.json | head -5
+          fi
+
+      - name: 📤 Commit et push des changements
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          echo "=== 📤 PUBLICATION DES CHANGEMENTS ==="
+          
+          # Configuration Git
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "GitHub Action"
+          git config --local pull.rebase false
+          
+          # Ajouter le fichier
+          echo "📝 Ajout du fichier modifié..."
+          git add public/data/gardes_du_jour.json
+          
+          # Créer le commit
+          COMMIT_MESSAGE="🏥 Mise à jour automatique: ${{ steps.analyze.outputs.pharmacies_count }} pharmacies (${{ steps.analyze.outputs.phone_rate }}% avec tel) - ${{ steps.analyze.outputs.period }}"
+          
+          echo "💬 Message de commit: ${COMMIT_MESSAGE}"
+          git commit -m "${COMMIT_MESSAGE}" || echo "⚠️ Aucun changement à commiter"
+          
+          # Pousser les changements
+          echo "🚀 Pousser les changements..."
+          git pull origin main --rebase
+          git push origin main || echo "⚠️ Push échoué ou non nécessaire"
+          
+          echo "✅ Changements publiés avec succès!"
+
+      - name: 📊 Génération du rapport
+        if: always()
+        run: |
+          echo "=== 📊 RAPPORT D'EXÉCUTION ==="
+          echo "Workflow: ${{ github.workflow }}"
+          echo "Job: ${{ github.job }}"
+          echo "Run ID: ${{ github.run_id }}"
+          echo "Run Number: ${{ github.run_number }}"
+          echo "Référentiel: ${{ github.repository }}"
+          echo "Branche: ${{ github.ref_name }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Déclencheur: ${{ github.event_name }}"
+          echo "Date: $(date '+%Y-%m-%d %H:%M:%S %Z')"
+          echo "Statut: ${{ job.status }}"
+          
+          if [ -f "public/data/gardes_du_jour.json" ]; then
+            echo ""
+            echo "📈 STATISTIQUES FINALES:"
+            echo "- Pharmacies: ${{ steps.analyze.outputs.pharmacies_count }}"
+            echo "- Téléphones: ${{ steps.analyze.outputs.phone_rate }}%"
+            echo "- Période: ${{ steps.analyze.outputs.period }}"
+            echo "- Qualité: ${{ steps.analyze.outputs.quality }}"
+            echo "- Changements: ${{ steps.check_changes.outputs.has_changes }}"
+          fi
+          
+          if [ "${{ job.status }}" = "success" ]; then
+            echo ""
+            echo "🎉 SUCCÈS: Mise à jour terminée"
+            echo "🔗 Fichier: https://github.com/${{ github.repository }}/blob/main/public/data/gardes_du_jour.json"
+          else
+            echo ""
+            echo "❌ ÉCHEC: Le workflow a rencontré une erreur"
+          fi
+
+      - name: 🚨 Notification en cas d'échec
+        if: failure()
+        run: |
+          echo "⚠️  ALERTE: Le workflow a échoué!"
+          echo "Veuillez vérifier les logs pour plus de détails."
+          echo ""
+          echo "🔗 Logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo ""
+          echo "Prochaines étapes:"
+          echo "1. Vérifier la connexion à DocHelp"
+          echo "2. Vérifier le script de scraping"
+          echo "3. Vérifier les dépendances"

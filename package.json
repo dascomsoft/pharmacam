@@ -4,19 +4,28 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "next lint",
+    "scrape": "node scripts/scrape-gardes-optimized.js",
+    "scrape:test": "node scripts/scrape-gardes.js",
+    "update": "./scripts/create-update-script.sh",
+    "update:git": "./scripts/create-update-script.sh --git",
+    "stats": "node -e \"const d=require('./public/data/gardes_du_jour.json'); console.log('Total:', d.total); console.log('Avec tel:', d.pharmacies.filter(p=>p.tel&&p.tel!=='Non listé').length); console.log('Villes:', [...new Set(d.pharmacies.map(p=>p.ville))].length);\""
   },
   "dependencies": {
-    "framer-motion": "11.18.2",
-    "lucide-react": "0.556.0",
-    "next": "15.0.5",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "axios": "^1.13.2",
+    "cheerio": "^1.1.2",
+    "framer-motion": "^11.18.2",
+    "lucide-react": "^0.556.0",
+    "next": "^15.0.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "autoprefixer": "10.4.22",
+    "autoprefixer": "^10.4.22",
     "eslint": "^9.39.1",
-    "postcss": "8.5.6",
-    "tailwindcss": "3.4.18"
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.18"
   }
 }
