@@ -1129,6 +1129,54 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -1282,6 +1330,7 @@ export default function Home() {
     }
   }, [location]);
 
+  // ⭐⭐ CORRECTION : Fonction loadGardesData utilisant le fichier clean ⭐⭐
   const loadGardesData = async () => {
     setLoadingGardes(true);
     try {
@@ -1307,9 +1356,9 @@ export default function Home() {
   };
 
   //scroller vers le haut
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
+  useEffect(() =>{
+    window.scrollTo(0,0)
+  },[])
 
   // Recherche vocale
   useEffect(() => {
@@ -1338,24 +1387,36 @@ export default function Home() {
     setSearchResults([]);
   };
 
+  // ⭐⭐ CORRECTION : handleRegionSelect pour nouvelle structure ⭐⭐
   const handleRegionSelect = (region) => {
     setSelectedRegion(region);
     setViewMode('city');
 
     if (gardesData?.regions[region]) {
-      const pharmacies = gardesData.regions[region];
-      const villes = [...new Set(pharmacies.map(p => p.ville || p.localisation?.split(',')[0] || 'Ville inconnue'))];
-      setSelectedCity({ region, villes });
+      // NOUVELLE STRUCTURE : gardesData.regions[region] = [{ ville, pharmacies: [...] }, ...]
+      const citiesData = gardesData.regions[region];
+      
+      // Extraire les noms de ville
+      const villes = citiesData.map(city => city.ville);
+      
+      setSelectedCity({ 
+        region, 
+        villes,
+        citiesData // Garder les données complètes pour plus tard
+      });
     }
   };
 
+  // ⭐⭐ CORRECTION : handleCitySelect pour nouvelle structure ⭐⭐
   const handleCitySelect = (cityName) => {
     if (!selectedRegion || !gardesData) return;
 
-    const pharmacies = gardesData.regions[selectedRegion].filter(pharmacy => {
-      const pharmacyCity = pharmacy.ville || pharmacy.localisation?.split(',')[0] || '';
-      return pharmacyCity.includes(cityName) || cityName.includes(pharmacyCity);
-    });
+    // Chercher la ville dans la structure organisée
+    const regionData = gardesData.regions[selectedRegion];
+    const cityData = regionData.find(city => city.ville === cityName);
+    
+    // Si trouvé, prendre les pharmacies de cette ville
+    const pharmacies = cityData ? cityData.pharmacies : [];
 
     setSearchResults(pharmacies.map((ph, i) => ({
       ...ph,
@@ -1399,7 +1460,7 @@ export default function Home() {
       }
             </div>
           </div>
-          
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-4">
               <div>
@@ -1409,7 +1470,7 @@ export default function Home() {
                   <p class="text-white">${pharmacy.adresse || pharmacy.localisation || 'Non spécifiée'}</p>
                 </div>
               </div>
-              
+
               <div>
                 <h5 class="text-sm text-gray-400 mb-2">Téléphone</h5>
                 <div class="flex items-center gap-2">
@@ -1417,7 +1478,7 @@ export default function Home() {
                   <a href="tel:${pharmacy.telephone || ''}" class="text-green-400 hover:text-green-300">${pharmacy.telephone || 'Non disponible'}</a>
                 </div>
               </div>
-              
+
               <div>
                 <h5 class="text-sm text-gray-400 mb-2">Horaires</h5>
                 <div class="flex items-center gap-2">
@@ -1426,7 +1487,7 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            
+
             <div class="space-y-4">
               ${pharmacy.services ? `
                 <div>
@@ -1434,14 +1495,14 @@ export default function Home() {
                   <p class="text-white">${pharmacy.services}</p>
                 </div>
               ` : ''}
-              
+
               ${pharmacy.notes ? `
                 <div>
                   <h5 class="text-sm text-gray-400 mb-2">Notes</h5>
                   <p class="text-white">${pharmacy.notes}</p>
                 </div>
               ` : ''}
-              
+
               ${pharmacy.type === 'garde' ? `
                 <div class="p-4 bg-green-600/10 border border-green-600/20 rounded-xl">
                   <div class="flex items-center gap-2 mb-2">
@@ -1453,7 +1514,7 @@ export default function Home() {
               ` : ''}
             </div>
           </div>
-          
+
           <div class="flex gap-3 mt-8 pt-6 border-t border-gray-800">
             <button onclick="window.open('tel:${pharmacy.telephone || ''}', '_self')" 
                     class="flex-1 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-medium transition flex items-center justify-center gap-2 ${!pharmacy.telephone ? 'opacity-50 cursor-not-allowed' : ''}"
@@ -1667,7 +1728,7 @@ export default function Home() {
   }
 
   return (
-    <div className="relative pt-4 pb-20 md:pb-24 bg-gradient-to-b from-gray-900 to-black min-h-screen">
+    <div className="relative pt-4 pb-32 md:pb-24 bg-gradient-to-b from-gray-900 to-black min-h-screen">
       {/* Header */}
       <header className="sticky top-0 z-50 backdrop-blur-lg bg-gray-900/80 border-b border-gray-800/50 safe-area-padding">
         <div className="container mx-auto px-4 py-4">
@@ -1712,7 +1773,7 @@ export default function Home() {
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 py-4 md:py-6">
+      <main className="container mx-auto px-4 py-6">
         <AnimatePresence mode="wait">
           {viewMode === 'home' && (
             <motion.div
@@ -1720,10 +1781,10 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="pt-2 md:pt-8"
+              className="pt-4 md:pt-8"
             >
               {/* Hero Section */}
-              <div className="text-center mb-6 md:mb-12">
+              <div className="text-center mb-8 md:mb-12">
                 <div className="inline-flex items-center space-x-2 mb-4 px-4 py-2 bg-green-600/10 rounded-full border border-green-600/20">
                   <Sparkles size={16} className="text-green-400" />
                   <span className="text-sm md:text-base text-green-400 font-medium">Recherche Vocale</span>
@@ -1778,8 +1839,8 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Barre de recherche - UNIFORME MOBILE/DESKTOP */}
-              <div className="max-w-3xl mx-auto mb-6 md:mb-8">
+              {/* Barre de recherche */}
+              <div className="max-w-3xl mx-auto mb-8">
                 <div className="relative">
                   <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500">
                     <Search size={20} />
@@ -1790,20 +1851,20 @@ export default function Home() {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyPress={handleTextSearch}
                     placeholder="Tapez ou dites 'pharmacie de garde' ou 'pharmacie normale'..."
-                    className="w-full pl-12 pr-24 md:pr-24 py-3 bg-gray-900 border border-gray-700 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-500/30 outline-none transition text-base"
+                    className="w-full pl-12 pr-32 py-4 bg-gray-900 border border-gray-700 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-500/30 outline-none transition text-base md:text-lg"
                     disabled={isLoading}
                   />
                   <button
                     onClick={() => searchQuery.trim() && performSearch(searchQuery)}
                     disabled={isLoading || !searchQuery.trim()}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-green-600 to-green-700 text-white px-4 py-2 rounded-lg hover:opacity-90 transition flex items-center gap-2 disabled:opacity-50 text-sm"
+                    className="absolute right-2 top-2 bg-gradient-to-r from-green-600 to-green-700 text-white px-6 py-3 rounded-lg hover:opacity-90 transition flex items-center gap-2 disabled:opacity-50 text-base"
                   >
                     {isLoading ? (
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
                     ) : (
                       <>
-                        <Search size={16} />
-                        <span>Chercher</span>
+                        <Search size={18} />
+                        Chercher
                       </>
                     )}
                   </button>
@@ -1840,13 +1901,13 @@ export default function Home() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="pt-2 md:pt-4"
+              className="pt-4"
             >
               <div className="max-w-4xl mx-auto">
                 <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
                   Sélectionnez une région
                 </h2>
-                <p className="text-gray-400 mb-6 md:mb-8">
+                <p className="text-gray-400 mb-8">
                   Choisissez la région pour voir les pharmacies de garde disponibles
                 </p>
 
@@ -1858,7 +1919,20 @@ export default function Home() {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {Object.keys(gardesData?.regions || {}).map((region) => {
-                      const pharmacyCount = gardesData.regions[region]?.length || 0;
+                      // ⭐⭐ CORRECTION : Calculer le vrai nombre de pharmacies ⭐⭐
+                      const regionData = gardesData.regions[region] || [];
+                      let pharmacyCount = 0;
+                      
+                      // Nouvelle structure : chaque ville a un tableau pharmacies
+                      if (regionData.length > 0 && regionData[0].pharmacies) {
+                        pharmacyCount = regionData.reduce((total, city) => {
+                          return total + (city.pharmacies?.length || 0);
+                        }, 0);
+                      } else {
+                        // Ancienne structure (fallback)
+                        pharmacyCount = regionData.length;
+                      }
+                      
                       const colorClass = REGION_COLORS[region] || 'from-green-500 to-green-700';
 
                       return (
@@ -1900,22 +1974,33 @@ export default function Home() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="pt-2 md:pt-4"
+              className="pt-4"
             >
               <div className="max-w-4xl mx-auto">
                 <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
                   {selectedRegion}
                 </h2>
-                <p className="text-gray-400 mb-6 md:mb-8">
+                <p className="text-gray-400 mb-8">
                   Sélectionnez une ville pour voir les pharmacies de garde
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                   {selectedCity.villes.map((ville, index) => {
-                    const villePharmacies = gardesData.regions[selectedRegion]?.filter(p => {
-                      const pharmacyCity = p.ville || p.localisation?.split(',')[0] || '';
-                      return pharmacyCity.includes(ville) || ville.includes(pharmacyCity);
-                    }) || [];
+                    // ⭐⭐ CORRECTION : Trouver le nombre de pharmacies par ville ⭐⭐
+                    let villePharmaciesCount = 0;
+                    
+                    if (selectedCity.citiesData) {
+                      // Nouvelle structure : chercher dans citiesData
+                      const cityData = selectedCity.citiesData.find(city => city.ville === ville);
+                      villePharmaciesCount = cityData ? cityData.pharmacies?.length || 0 : 0;
+                    } else if (gardesData?.regions[selectedRegion]) {
+                      // Ancienne structure (fallback)
+                      const regionData = gardesData.regions[selectedRegion];
+                      villePharmaciesCount = regionData.filter(p => {
+                        const pharmacyCity = p.ville || p.localisation?.split(',')[0] || '';
+                        return pharmacyCity.includes(ville) || ville.includes(pharmacyCity);
+                      }).length;
+                    }
 
                     return (
                       <button
@@ -1927,12 +2012,12 @@ export default function Home() {
                           <h3 className="font-semibold text-white text-lg">{ville}</h3>
                           <div className="px-2 py-1 bg-green-600/20 rounded-full">
                             <span className="text-green-400 text-sm font-medium">
-                              {villePharmacies.length}
+                              {villePharmaciesCount}
                             </span>
                           </div>
                         </div>
                         <p className="text-gray-400 text-sm">
-                          {villePharmacies.length} pharmacie{villePharmacies.length > 1 ? 's' : ''} de garde
+                          {villePharmaciesCount} pharmacie{villePharmaciesCount > 1 ? 's' : ''} de garde
                         </p>
                         <div className="flex items-center gap-1 mt-3 text-green-400 text-sm">
                           <Clock size={14} />
@@ -1952,7 +2037,7 @@ export default function Home() {
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
-              className="pt-2 md:pt-4"
+              className="pt-4"
             >
               {isLoading ? (
                 <div className="text-center py-12">
@@ -1966,7 +2051,7 @@ export default function Home() {
 
                   {searchResults.length > 0 ? (
                     <div className="max-w-6xl mx-auto">
-                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 md:mb-8">
+                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
                         <div>
                           <h2 className="text-2xl font-bold text-white">
                             {searchResults.length} résultat{searchResults.length > 1 ? 's' : ''}
@@ -2017,6 +2102,7 @@ export default function Home() {
                             <PharmacyCard
                               pharmacy={pharmacy}
                               distance={pharmacy.distance}
+                              isRecommended={index === 0}
                               isGarde={pharmacy.type === 'garde'}
                             />
                           </div>
@@ -2045,7 +2131,7 @@ export default function Home() {
 
       {/* Bouton vocal */}
       {(viewMode === 'home' || viewMode === 'results') && (
-        <div className="fixed bottom-32 md:bottom-8 left-1/2 -translate-x-1/2 z-50">
+        <div className="fixed bottom-24 md:bottom-8 left-1/2 -translate-x-1/2 z-50">
           <div className="relative">
             <MicrophoneButton
               isListening={isListening}
@@ -2069,7 +2155,7 @@ export default function Home() {
       )}
 
       {/* Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 backdrop-blur-lg bg-gray-900/95 border-t border-gray-800/50 safe-area-padding z-40">
+      <nav className="fixed bottom-0 left-0 right-0 backdrop-blur-lg bg-gray-900/95 border-t border-gray-800/50 safe-area-padding">
         <div className="container mx-auto px-4 py-3">
           <div className="flex justify-around">
             <button

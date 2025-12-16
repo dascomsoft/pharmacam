@@ -35,7 +35,7 @@ jobs:
         run: |
           echo "📅 Date: $(date)"
           echo "🔄 Installation des dépendances (prod + dev pour le scraper)..."
-          npm ci  # ← Tous les packages nécessaires
+          npm ci
           echo "✅ Dépendances installées"
           npm list --depth=0
 
@@ -60,35 +60,104 @@ jobs:
           
           echo "✅ Scraping terminé avec succès"
 
-      - name: 📊 Analyse des données générées
-        id: analyze
+      - name: 🧹 Nettoyage automatique des données
+        id: clean
         run: |
-          echo "=== 📈 ANALYSE DES DONNÉES ==="
+          echo "=== 🧹 NETTOYAGE AUTOMATIQUE DES DONNÉES ==="
           
           if [ ! -f "public/data/gardes_du_jour.json" ]; then
-            echo "❌ ERREUR: Fichier non généré"
+            echo "❌ ERREUR: Fichier source introuvable"
             exit 1
           fi
           
-          FILE_SIZE=$(wc -c < "public/data/gardes_du_jour.json")
-          echo "📁 Taille du fichier: ${FILE_SIZE} octets"
+          echo "📁 Fichier source: gardes_du_jour.json"
           
+          # Exécuter le script de nettoyage
+          node scripts/clean-gardes-data.js
+          
+          # Vérifier que le fichier clean est créé
+          if [ ! -f "public/data/gardes_du_jour_clean.json" ]; then
+            echo "❌ ERREUR: Fichier nettoyé non généré"
+            exit 1
+          fi
+          
+          # Comparer les tailles
+          SOURCE_SIZE=$(wc -c < "public/data/gardes_du_jour.json")
+          CLEAN_SIZE=$(wc -c < "public/data/gardes_du_jour_clean.json")
+          echo "📊 Taille source: ${SOURCE_SIZE} octets"
+          echo "📊 Taille nettoyée: ${CLEAN_SIZE} octets"
+          
+          # Vérifier la structure du fichier nettoyé
+          echo "🔍 Vérification structure du fichier nettoyé..."
+          NODES_RESULT=$(node -e "
+            try {
+              const data = require('./public/data/gardes_du_jour_clean.json');
+              const regions = Object.keys(data.regions || {});
+              let totalCities = 0;
+              let totalPharmacies = 0;
+              
+              regions.forEach(region => {
+                const cities = data.regions[region] || [];
+                totalCities += cities.length;
+                cities.forEach(city => {
+                  totalPharmacies += city.pharmacies?.length || 0;
+                });
+              });
+              
+              console.log('OK');
+              console.log('Regions:', regions.length);
+              console.log('Villes totales:', totalCities);
+              console.log('Pharmacies totales:', totalPharmacies);
+            } catch (e) {
+              console.error('ERROR:', e.message);
+              process.exit(1);
+            }
+          ")
+          
+          echo "✅ Nettoyage terminé avec succès"
+
+      - name: 📊 Analyse des données générées
+        id: analyze
+        run: |
+          echo "=== 📈 ANALYSE DES DONNÉES NETTOYÉES ==="
+          
+          if [ ! -f "public/data/gardes_du_jour_clean.json" ]; then
+            echo "❌ ERREUR: Fichier nettoyé non trouvé"
+            exit 1
+          fi
+          
+          FILE_SIZE=$(wc -c < "public/data/gardes_du_jour_clean.json")
+          echo "📁 Taille du fichier nettoyé: ${FILE_SIZE} octets"
+          
+          # Analyser le fichier nettoyé
           PHARMACIES_COUNT=$(node -e "
             try {
-              const data = require('./public/data/gardes_du_jour.json');
-              console.log(data.total || data.pharmacies?.length || 0);
+              const data = require('./public/data/gardes_du_jour_clean.json');
+              console.log(data.total || 0);
             } catch (e) {
               console.log('0');
               process.exit(1);
             }
           ")
-          echo "🏥 Nombre de pharmacies: ${PHARMACIES_COUNT}"
+          echo "🏥 Nombre total de pharmacies: ${PHARMACIES_COUNT}"
           
           PHONE_RATE=$(node -e "
             try {
-              const data = require('./public/data/gardes_du_jour.json');
-              const withPhone = data.pharmacies.filter(p => p.tel && p.tel !== 'Non listé').length;
-              const total = data.pharmacies.length;
+              const data = require('./public/data/gardes_du_jour_clean.json');
+              let withPhone = 0;
+              let total = 0;
+              
+              Object.values(data.regions || {}).forEach(cities => {
+                cities.forEach(city => {
+                  city.pharmacies?.forEach(p => {
+                    total++;
+                    if (p.tel && p.tel !== 'Non listé') {
+                      withPhone++;
+                    }
+                  });
+                });
+              });
+              
               const rate = total > 0 ? Math.round((withPhone / total) * 100) : 0;
               console.log(rate);
             } catch (e) {
@@ -99,7 +168,7 @@ jobs:
           
           PERIODE=$(node -e "
             try {
-              const data = require('./public/data/gardes_du_jour.json');
+              const data = require('./public/data/gardes_du_jour_clean.json');
               console.log(data.periode || 'Non spécifiée');
             } catch (e) {
               console.log('Erreur');
@@ -109,14 +178,35 @@ jobs:
           
           REGIONS_COUNT=$(node -e "
             try {
-              const data = require('./public/data/gardes_du_jour.json');
-              const regions = new Set(data.pharmacies.map(p => p.region).filter(r => r));
-              console.log(regions.size);
+              const data = require('./public/data/gardes_du_jour_clean.json');
+              const regions = Object.keys(data.regions || {});
+              console.log(regions.length);
             } catch (e) {
               console.log('0');
             }
           ")
           echo "🌍 Régions couvertes: ${REGIONS_COUNT}"
+          
+          # Nombre de villes distinctes
+          CITIES_COUNT=$(node -e "
+            try {
+              const data = require('./public/data/gardes_du_jour_clean.json');
+              let citiesSet = new Set();
+              
+              Object.values(data.regions || {}).forEach(cities => {
+                cities.forEach(city => {
+                  if (city.ville) {
+                    citiesSet.add(city.ville);
+                  }
+                });
+              });
+              
+              console.log(citiesSet.size);
+            } catch (e) {
+              console.log('0');
+            }
+          ")
+          echo "🏙️  Villes distinctes: ${CITIES_COUNT}"
           
           # Qualité
           if [ "${PHARMACIES_COUNT}" -lt 10 ]; then
@@ -137,6 +227,7 @@ jobs:
           echo "pharmacies_count=${PHARMACIES_COUNT}" >> $GITHUB_OUTPUT
           echo "phone_rate=${PHONE_RATE}" >> $GITHUB_OUTPUT
           echo "period=${PERIODE}" >> $GITHUB_OUTPUT
+          echo "cities_count=${CITIES_COUNT}" >> $GITHUB_OUTPUT
 
       - name: 💾 Sauvegarde des données
         if: success()
@@ -144,15 +235,25 @@ jobs:
           echo "=== 💾 SAUVEGARDE ==="
           TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           BACKUP_DIR="public/data/backups"
-          BACKUP_FILE="${BACKUP_DIR}/gardes_${TIMESTAMP}.json"
           
+          # Créer le dossier backups s'il n'existe pas
           mkdir -p "${BACKUP_DIR}"
-          cp "public/data/gardes_du_jour.json" "${BACKUP_FILE}"
           
-          echo "📦 Backup créé: ${BACKUP_FILE}"
+          # Sauvegarder le fichier source
+          BACKUP_SOURCE="${BACKUP_DIR}/gardes_source_${TIMESTAMP}.json"
+          cp "public/data/gardes_du_jour.json" "${BACKUP_SOURCE}"
+          echo "📦 Backup source créé: ${BACKUP_SOURCE}"
           
-          ls -t "${BACKUP_DIR}"/*.json | tail -n +8 | xargs -r rm -f
-          echo "🗑️  Anciens backups nettoyés (gardés: 7 derniers)"
+          # Sauvegarder le fichier nettoyé
+          BACKUP_CLEAN="${BACKUP_DIR}/gardes_clean_${TIMESTAMP}.json"
+          cp "public/data/gardes_du_jour_clean.json" "${BACKUP_CLEAN}"
+          echo "📦 Backup nettoyé créé: ${BACKUP_CLEAN}"
+          
+          # Nettoyer les anciens backups (garder les 7 derniers de chaque type)
+          ls -t "${BACKUP_DIR}"/gardes_source_*.json | tail -n +8 | xargs -r rm -f
+          ls -t "${BACKUP_DIR}"/gardes_clean_*.json | tail -n +8 | xargs -r rm -f
+          
+          echo "🗑️  Anciens backups nettoyés (gardés: 7 derniers de chaque type)"
 
       - name: 🔍 Vérification des changements
         id: check_changes
@@ -161,15 +262,30 @@ jobs:
           
           git status
           
-          if git diff --quiet public/data/gardes_du_jour.json; then
-            echo "🔄 Aucun changement dans les données"
-            echo "has_changes=false" >> $GITHUB_OUTPUT
+          # Vérifier les changements dans les deux fichiers
+          CHANGES_DETECTED=false
+          
+          if git diff --quiet public/data/gardes_du_jour_clean.json; then
+            echo "ℹ️  Aucun changement dans gardes_du_jour_clean.json"
           else
-            echo "📝 Changements détectés"
+            echo "📝 Changements détectés dans gardes_du_jour_clean.json"
+            CHANGES_DETECTED=true
+          fi
+          
+          if git diff --quiet public/data/gardes_du_jour.json; then
+            echo "ℹ️  Aucun changement dans gardes_du_jour.json"
+          else
+            echo "📝 Changements détectés dans gardes_du_jour.json"
+            CHANGES_DETECTED=true
+          fi
+          
+          if [ "$CHANGES_DETECTED" = true ]; then
             echo "has_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
           fi
 
-      - name: 📤 Commit et push des changements (force safe)
+      - name: 📤 Commit et push des changements
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
           echo "=== 📤 PUBLICATION DES CHANGEMENTS ==="
@@ -177,9 +293,13 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Action"
 
+          # Ajouter les deux fichiers
           git add public/data/gardes_du_jour.json
+          git add public/data/gardes_du_jour_clean.json
 
-          COMMIT_MESSAGE="🏥 Mise à jour automatique: ${{ steps.analyze.outputs.pharmacies_count }} pharmacies (${{ steps.analyze.outputs.phone_rate }}% avec tel) - ${{ steps.analyze.outputs.period }}"
+          COMMIT_MESSAGE="🏥 Mise à jour automatique: ${{ steps.analyze.outputs.pharmacies_count }} pharmacies (${{ steps.analyze.outputs.phone_rate }}% avec tel) - ${{ steps.analyze.outputs.period }} - ${{ steps.analyze.outputs.cities_count }} villes"
+          
+          echo "💾 Commit: ${COMMIT_MESSAGE}"
           git commit -m "${COMMIT_MESSAGE}"
 
           # Force push safe pour éviter les conflits futurs
@@ -192,13 +312,20 @@ jobs:
         run: |
           echo "=== 📊 RAPPORT FINAL ==="
           echo "Statut: ${{ job.status }}"
-          if [ -f "public/data/gardes_du_jour.json" ]; then
+          echo "=== DONNÉES NETTOYÉES ==="
+          if [ -f "public/data/gardes_du_jour_clean.json" ]; then
             echo "- Pharmacies: ${{ steps.analyze.outputs.pharmacies_count }}"
             echo "- Téléphones: ${{ steps.analyze.outputs.phone_rate }}%"
+            echo "- Villes: ${{ steps.analyze.outputs.cities_count }}"
             echo "- Période: ${{ steps.analyze.outputs.period }}"
           fi
+          
+          echo "=== FICHIERS GÉNÉRÉS ==="
+          echo "1. gardes_du_jour.json (source brut)"
+          echo "2. gardes_du_jour_clean.json (nettoyé, organisé par ville)"
+          
           if [ "${{ job.status }}" = "success" ]; then
-            echo "🎉 SUCCÈS: Mise à jour terminée"
+            echo "🎉 SUCCÈS: Mise à jour et nettoyage terminés"
           else
             echo "❌ ÉCHEC: Voir les logs"
           fi
@@ -207,3 +334,8 @@ jobs:
         if: failure()
         run: |
           echo "⚠️  Workflow échoué – vérifier les logs GitHub Actions"
+          echo "=== DERNIERS LOGS ==="
+          echo "Vérifier les étapes:"
+          echo "1. scrape: Scraping des données"
+          echo "2. clean: Nettoyage automatique"
+          echo "3. analyze: Analyse qualité"
