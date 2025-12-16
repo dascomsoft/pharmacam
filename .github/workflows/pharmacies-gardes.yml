@@ -35,7 +35,7 @@ jobs:
         run: |
           echo "📅 Date: $(date)"
           echo "🔄 Installation des dépendances (prod + dev pour le scraper)..."
-          npm ci  # ← CORRECTION : on enlève --only=production
+          npm ci  # ← Tous les packages nécessaires
           echo "✅ Dépendances installées"
           npm list --depth=0
 
@@ -45,7 +45,6 @@ jobs:
           echo "🎯 Démarrage du scraping des pharmacies de garde..."
           echo "🌐 Source: https://www.dochelp-cm.org"
           
-          # Exécuter le scraper
           START_TIME=$(date +%s)
           node scripts/scrape-gardes-optimized.js
           EXIT_CODE=$?
@@ -66,17 +65,14 @@ jobs:
         run: |
           echo "=== 📈 ANALYSE DES DONNÉES ==="
           
-          # Vérifier l'existence du fichier
           if [ ! -f "public/data/gardes_du_jour.json" ]; then
             echo "❌ ERREUR: Fichier non généré"
             exit 1
           fi
           
-          # Taille du fichier
           FILE_SIZE=$(wc -c < "public/data/gardes_du_jour.json")
           echo "📁 Taille du fichier: ${FILE_SIZE} octets"
           
-          # Nombre de pharmacies
           PHARMACIES_COUNT=$(node -e "
             try {
               const data = require('./public/data/gardes_du_jour.json');
@@ -86,10 +82,8 @@ jobs:
               process.exit(1);
             }
           ")
-          
           echo "🏥 Nombre de pharmacies: ${PHARMACIES_COUNT}"
           
-          # Taux de téléphones
           PHONE_RATE=$(node -e "
             try {
               const data = require('./public/data/gardes_du_jour.json');
@@ -101,10 +95,8 @@ jobs:
               console.log('0');
             }
           ")
-          
           echo "📞 Taux de téléphones: ${PHONE_RATE}%"
           
-          # Période
           PERIODE=$(node -e "
             try {
               const data = require('./public/data/gardes_du_jour.json');
@@ -113,10 +105,8 @@ jobs:
               console.log('Erreur');
             }
           ")
-          
           echo "📅 Période: ${PERIODE}"
           
-          # Nombre de régions
           REGIONS_COUNT=$(node -e "
             try {
               const data = require('./public/data/gardes_du_jour.json');
@@ -126,10 +116,9 @@ jobs:
               console.log('0');
             }
           ")
-          
           echo "🌍 Régions couvertes: ${REGIONS_COUNT}"
           
-          # Critères de validation
+          # Qualité
           if [ "${PHARMACIES_COUNT}" -lt 10 ]; then
             echo "⚠️  ALERTE: Peu de pharmacies trouvées (< 10)"
             echo "quality=low" >> $GITHUB_OUTPUT
@@ -144,16 +133,15 @@ jobs:
             echo "quality=high" >> $GITHUB_OUTPUT
           fi
           
-          echo "::set-output name=pharmacies_count::${PHARMACIES_COUNT}"
-          echo "::set-output name=phone_rate::${PHONE_RATE}"
-          echo "::set-output name=period::${PERIODE}"
+          # Nouvelle syntaxe outputs
+          echo "pharmacies_count=${PHARMACIES_COUNT}" >> $GITHUB_OUTPUT
+          echo "phone_rate=${PHONE_RATE}" >> $GITHUB_OUTPUT
+          echo "period=${PERIODE}" >> $GITHUB_OUTPUT
 
       - name: 💾 Sauvegarde des données
         if: success()
         run: |
           echo "=== 💾 SAUVEGARDE ==="
-          
-          # Créer un backup
           TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           BACKUP_DIR="public/data/backups"
           BACKUP_FILE="${BACKUP_DIR}/gardes_${TIMESTAMP}.json"
@@ -163,9 +151,7 @@ jobs:
           
           echo "📦 Backup créé: ${BACKUP_FILE}"
           
-          # Garder seulement les 7 derniers backups
           ls -t "${BACKUP_DIR}"/*.json | tail -n +8 | xargs -r rm -f
-          
           echo "🗑️  Anciens backups nettoyés (gardés: 7 derniers)"
 
       - name: 🔍 Vérification des changements
@@ -173,92 +159,51 @@ jobs:
         run: |
           echo "=== 🔍 DÉTECTION DES CHANGEMENTS ==="
           
-          # Vérifier les changements
           git status
-          git diff --name-only
           
           if git diff --quiet public/data/gardes_du_jour.json; then
             echo "🔄 Aucun changement dans les données"
             echo "has_changes=false" >> $GITHUB_OUTPUT
           else
-            echo "📝 Changements détectés dans le fichier JSON"
+            echo "📝 Changements détectés"
             echo "has_changes=true" >> $GITHUB_OUTPUT
-            
-            # Afficher le diff
-            echo "Différence:"
-            git diff --stat public/data/gardes_du_jour.json | head -5
           fi
 
-      - name: 📤 Commit et push des changements
+      - name: 📤 Commit et push des changements (force safe)
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
           echo "=== 📤 PUBLICATION DES CHANGEMENTS ==="
-          
-          # Configuration Git
+
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "GitHub Action"
-          git config --local pull.rebase false
-          
-          # Ajouter le fichier
-          echo "📝 Ajout du fichier modifié..."
+
           git add public/data/gardes_du_jour.json
-          
-          # Créer le commit
+
           COMMIT_MESSAGE="🏥 Mise à jour automatique: ${{ steps.analyze.outputs.pharmacies_count }} pharmacies (${{ steps.analyze.outputs.phone_rate }}% avec tel) - ${{ steps.analyze.outputs.period }}"
-          
-          echo "💬 Message de commit: ${COMMIT_MESSAGE}"
-          git commit -m "${COMMIT_MESSAGE}" || echo "⚠️ Aucun changement à commiter"
-          
-          # Pousser les changements
-          echo "🚀 Pousser les changements..."
-          git pull origin main --rebase
-          git push origin main || echo "⚠️ Push échoué ou non nécessaire"
-          
+          git commit -m "${COMMIT_MESSAGE}"
+
+          # Force push safe pour éviter les conflits futurs
+          git push origin main --force-with-lease
+
           echo "✅ Changements publiés avec succès!"
 
       - name: 📊 Génération du rapport
         if: always()
         run: |
-          echo "=== 📊 RAPPORT D'EXÉCUTION ==="
-          echo "Workflow: ${{ github.workflow }}"
-          echo "Job: ${{ github.job }}"
-          echo "Run ID: ${{ github.run_id }}"
-          echo "Run Number: ${{ github.run_number }}"
-          echo "Référentiel: ${{ github.repository }}"
-          echo "Branche: ${{ github.ref_name }}"
-          echo "Commit: ${{ github.sha }}"
-          echo "Déclencheur: ${{ github.event_name }}"
-          echo "Date: $(date '+%Y-%m-%d %H:%M:%S %Z')"
+          echo "=== 📊 RAPPORT FINAL ==="
           echo "Statut: ${{ job.status }}"
-          
           if [ -f "public/data/gardes_du_jour.json" ]; then
-            echo ""
-            echo "📈 STATISTIQUES FINALES:"
             echo "- Pharmacies: ${{ steps.analyze.outputs.pharmacies_count }}"
             echo "- Téléphones: ${{ steps.analyze.outputs.phone_rate }}%"
             echo "- Période: ${{ steps.analyze.outputs.period }}"
-            echo "- Qualité: ${{ steps.analyze.outputs.quality }}"
-            echo "- Changements: ${{ steps.check_changes.outputs.has_changes }}"
           fi
-          
           if [ "${{ job.status }}" = "success" ]; then
-            echo ""
             echo "🎉 SUCCÈS: Mise à jour terminée"
-            echo "🔗 Fichier: https://github.com/${{ github.repository }}/blob/main/public/data/gardes_du_jour.json"
           else
-            echo ""
-            echo "❌ ÉCHEC: Le workflow a rencontré une erreur"
+            echo "❌ ÉCHEC: Voir les logs"
           fi
 
-      - name: 🚨 Notification en cas d'échec
+      - name: 🚨 Notification échec
         if: failure()
         run: |
-          echo "⚠️  ALERTE: Le workflow a échoué!"
-          echo "Veuillez vérifier les logs pour plus de détails."
-          echo ""
-          echo "🔗 Logs: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          echo ""
-          echo "Prochaines étapes:"
-          echo "1. Vérifier la connexion à DocHelp"
-          echo "2. Vérifier le script de scraping"
-          echo "3. Vérifier les dépendances"
+          echo "⚠️  Workflow échoué – vérifier les logs GitHub Actions"
