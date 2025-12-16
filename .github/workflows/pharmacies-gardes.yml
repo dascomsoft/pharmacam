@@ -34,8 +34,8 @@ jobs:
       - name: 📦 Installation des dépendances
         run: |
           echo "📅 Date: $(date)"
-          echo "🔄 Installation des dépendances..."
-          npm ci --only=production
+          echo "🔄 Installation des dépendances (prod + dev pour le scraper)..."
+          npm ci  # ← CORRECTION : on enlève --only=production
           echo "✅ Dépendances installées"
           npm list --depth=0
 

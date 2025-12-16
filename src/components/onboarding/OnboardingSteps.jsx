@@ -2,6 +2,7 @@
 import { motion } from 'framer-motion';
 import { Mic, MapPin, Clock, Shield, Zap, Sparkles, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import { useEffect } from 'react';
 
 const steps = [
   {
@@ -28,6 +29,12 @@ const steps = [
 ];
 
 export default function OnboardingSteps({ onComplete }) {
+
+    //scroller vers le haut
+  useEffect(() =>{
+    window.scrollTo(0,0)
+  },[])
+  
   return (
     <div className="min-h-screen py-20 bg-gradient-to-br from-gray-900 to-black flex items-center justify-center p-4">
       {/* Background effects */}

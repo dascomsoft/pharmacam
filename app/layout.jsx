@@ -1,4 +1,7 @@
+
+
 import './globals.css'
+import ScrollToTopMobile from "@/src/components/ScrollToTopMobile";
 
 export const metadata = {
   title: 'Allo237 - Pharmacies Cameroun',
@@ -9,6 +12,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fr">
       <head>
+
         {/* Favicon unique */}
         <link rel="icon" href="/allo237logo.jpg" type="image/jpeg" />
         
@@ -29,9 +33,12 @@ export default function RootLayout({ children }) {
         <meta property="og:title" content={metadata.title} />
         <meta property="og:description" content={metadata.description} />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="/allo237logo.jpg" />
-      </head>
+        <meta property="og:image" content="/allo237logo.jpg" />      </head>
+
       <body className="min-h-screen bg-gray-900 text-white">
+        {/* 📱 UX mobile optimisée */}
+        <ScrollToTopMobile />
+
         {children}
       </body>
     </html>
