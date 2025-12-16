@@ -1,6 +1,6 @@
 'use client';
 import { motion } from 'framer-motion';
-import { Mic, MapPin, Clock, Shield, Zap, Sparkles, ArrowRight } from 'lucide-react';
+import { Mic, Clock, Shield, Zap, Sparkles, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect } from 'react';
 
@@ -11,13 +11,6 @@ const steps = [
     description: "Parlez simplement, nous comprenons",
     color: "from-green-500 to-emerald-500",
     feature: "Reconnaissance vocale française"
-  },
-  {
-    icon: <MapPin className="text-white" size={40} />,
-    title: "Localisation Instantanée",
-    description: "Trouvez la pharmacie la plus proche",
-    color: "from-blue-500 to-cyan-500",
-    feature: "Géolocalisation précise"
   },
   {
     icon: <Clock className="text-white" size={40} />,
@@ -95,7 +88,7 @@ export default function OnboardingSteps({ onComplete }) {
           </div>
         </div>
 
-        {/* Steps Section */}
+        {/* Steps Section - Maintenant seulement 2 étapes */}
         <div className="p-8 space-y-8">
           {steps.map((step, index) => (
             <motion.div
