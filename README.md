@@ -1,4 +1,4 @@
-# 🏥 Pharmacam - Digitalisation des Pharmacies de Garde au Cameroun
+# 🏥 Allo237 - Digitalisation des Pharmacies de Garde au Cameroun
 
 > Solution à un problème **réel et non-digitalisé** : trouver une pharmacie ouverte la nuit sans devoir parcourir les rues pour lire les affiches manuelles
 
@@ -15,7 +15,7 @@
 - ⚡ **Obtenir en 0.3s** : Liste des pharmacies ouvertes avec contacts vérifiés
 - 📱 **Tout depuis chez soi** : Sécurité, rapidité, fiabilité
 
-## ✨ **Ce Que Pharmacam Résout Vraiment**
+## ✨ **Ce Que Allo237 Résout Vraiment**
 | **Problème Terrain** | **Notre Solution Digitale** |
 |----------------------|----------------------------|
 | Affiches manuscrites illisibles/absentes | **Base de données centralisée et vérifiée** |

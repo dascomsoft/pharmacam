@@ -2443,7 +2443,7 @@ export default function Home() {
                   >
                     <div className="flex flex-col items-center gap-1">
                       <Clock size={20} className="sm:size-6" />
-                      <span className="font-semibold text-xs sm:text-sm">De garde</span>
+                      <span className="font-semibold text-xs sm:text-sm">Pharmacies De garde</span>
                       <span className="text-xs text-green-200">Urgence 24h/24</span>
                     </div>
                   </button>
@@ -2454,7 +2454,7 @@ export default function Home() {
                   >
                     <div className="flex flex-col items-center gap-1">
                       <Building2 size={20} className="sm:size-6" />
-                      <span className="font-semibold text-xs sm:text-sm">Normales</span>
+                      <span className="font-semibold text-xs sm:text-sm">Pharmacies Normales</span>
                       <span className="text-xs text-blue-200">Horaires réguliers</span>
                     </div>
                   </button>
@@ -2786,7 +2786,7 @@ export default function Home() {
               className="flex flex-col items-center gap-0.5 p-1.5 text-gray-500 hover:text-green-500 transition active:scale-95"
             >
               <Clock size={18} />
-              <span className="text-xs">Garde</span>
+              <span className="text-xs">Pharmacies de Garde</span>
             </button>
 
             <button
@@ -2794,7 +2794,7 @@ export default function Home() {
               className="flex flex-col items-center gap-0.5 p-1.5 text-gray-500 hover:text-blue-500 transition active:scale-95"
             >
               <Building2 size={18} />
-              <span className="text-xs">Normales</span>
+              <span className="text-xs">Pharmacie Normales</span>
             </button>
 
             {/* Bouton vocal avec effet girofare rouge */}
