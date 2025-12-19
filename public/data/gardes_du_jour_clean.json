@@ -1,15 +1,15 @@
 {
-  "id": "scrape_1766042053472",
-  "maj": "2025-12-18T07:14:13.472Z",
-  "periode": "du jeudi 18 décembre 2025 20h00 au vendredi 19 décembre 2025 08h00",
-  "total": 50,
+  "id": "scrape_1766128406463",
+  "maj": "2025-12-19T07:13:26.463Z",
+  "periode": "du vendredi 19 décembre 2025 20h00 au samedi 20 décembre 2025 08h00",
+  "total": 37,
   "regions": {
     "Centre": [
       {
         "ville": "Mbalmayo",
         "pharmacies": [
           {
-            "id": "ph_centre_0_1766042055510",
+            "id": "ph_centre_0_1766128408169",
             "nom": "Pharmacie VIMLI",
             "adresse": "Mbalmayo : MBALMAYO",
             "quartier": "MBALMAYO",
@@ -24,16 +24,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.857093765816112,
-              "lng": 11.497808401624944
+              "lat": 3.8526263335616515,
+              "lng": 11.501757924609437
             },
-            "note": "4.7",
-            "scraped_at": "2025-12-18T07:14:15.510Z",
+            "note": "3.5",
+            "scraped_at": "2025-12-19T07:13:28.169Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_3_1766042055511",
+            "id": "ph_centre_6_1766128408170",
             "nom": "Pharmacie PATIENCE",
             "adresse": "Mbalmayo : MBALMAYO",
             "quartier": "MBALMAYO",
@@ -48,16 +48,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8395916258751606,
-              "lng": 11.504017387242978
+              "lat": 3.8510640089764983,
+              "lng": 11.496994333661906
             },
-            "note": "3.8",
-            "scraped_at": "2025-12-18T07:14:15.511Z",
+            "note": "4.9",
+            "scraped_at": "2025-12-19T07:13:28.170Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_4_1766042055511",
+            "id": "ph_centre_8_1766128408170",
             "nom": "Pharmacie NYONG",
             "adresse": "Mbalmayo : MBALMAYO",
             "quartier": "MBALMAYO",
@@ -72,11 +72,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8429575820476205,
-              "lng": 11.493465211223906
+              "lat": 3.8423848193539194,
+              "lng": 11.495267673066923
             },
-            "note": "4.9",
-            "scraped_at": "2025-12-18T07:14:15.511Z",
+            "note": "4.3",
+            "scraped_at": "2025-12-19T07:13:28.170Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           }
@@ -86,13 +86,13 @@
         "ville": "Yaoundé",
         "pharmacies": [
           {
-            "id": "ph_centre_1_1766042055511",
-            "nom": "Pharmacie UNIVERSELLE",
-            "adresse": "Yaoundé : BIYEM ASSI BISCUITERIE",
-            "quartier": "BIYEM ASSI",
+            "id": "ph_centre_1_1766128408169",
+            "nom": "Pharmacie SAINTE ELISABETH DE NKOMO",
+            "adresse": "Yaoundé : CARREFOUR NKOMO-FACE BOULANGERIE FONTANA",
+            "quartier": "CARREFOUR NKOMO-FACE",
             "ville": "Yaoundé",
             "region": "Centre",
-            "tel": "650 71 43 82",
+            "tel": "243 15 30 58",
             "en_garde": true,
             "horaires": "20h00 - 08h00",
             "services": [
@@ -101,142 +101,22 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8394581361303586,
-              "lng": 11.502911916269818
-            },
-            "note": "4.0",
-            "scraped_at": "2025-12-18T07:14:15.511Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
-          },
-          {
-            "id": "ph_centre_5_1766042055511",
-            "nom": "Pharmacie NOBEL",
-            "adresse": "Yaoundé : CARREF. ANCIEN 6IEME ETOUDI",
-            "quartier": "CARREF. ANCIEN",
-            "ville": "Yaoundé",
-            "region": "Centre",
-            "tel": "242 10 17 28",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 3.855748804372628,
-              "lng": 11.497017104706366
-            },
-            "note": "3.8",
-            "scraped_at": "2025-12-18T07:14:15.511Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
-          },
-          {
-            "id": "ph_centre_6_1766042055511",
-            "nom": "Pharmacie MONTESQUIEU",
-            "adresse": "Yaoundé : COLLEGE MONTESQUIEU – MVOG ADA",
-            "quartier": "COLLEGE MONTESQUIEU",
-            "ville": "Yaoundé",
-            "region": "Centre",
-            "tel": "650 83 75 32",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 3.8510850474227354,
-              "lng": 11.511579549927964
-            },
-            "note": "4.7",
-            "scraped_at": "2025-12-18T07:14:15.511Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
-          },
-          {
-            "id": "ph_centre_7_1766042055511",
-            "nom": "Pharmacie LA ROSÉE",
-            "adresse": "Yaoundé : Carrefour TRADEX ELEVEURS",
-            "quartier": "Carrefour TRADEX",
-            "ville": "Yaoundé",
-            "region": "Centre",
-            "tel": "242 15 60 16",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 3.848603136247993,
-              "lng": 11.503571366342266
-            },
-            "note": "4.2",
-            "scraped_at": "2025-12-18T07:14:15.511Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
-          },
-          {
-            "id": "ph_centre_8_1766042055512",
-            "nom": "Pharmacie KETCHY",
-            "adresse": "Yaoundé : MADAGASCAR",
-            "quartier": "MADAGASCAR",
-            "ville": "Yaoundé",
-            "region": "Centre",
-            "tel": "222 23 90 22",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 3.8579656631885797,
-              "lng": 11.49246758078799
-            },
-            "note": "4.2",
-            "scraped_at": "2025-12-18T07:14:15.512Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
-          },
-          {
-            "id": "ph_centre_9_1766042055512",
-            "nom": "Pharmacie EKOUNOU",
-            "adresse": "Yaoundé : LABOGENIE EKOUNOU",
-            "quartier": "LABOGENIE EKOUNOU",
-            "ville": "Yaoundé",
-            "region": "Centre",
-            "tel": "222 30 67 78",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 3.8389610855511536,
-              "lng": 11.493506365427598
+              "lat": 3.841327680383115,
+              "lng": 11.495569402860914
             },
             "note": "4.5",
-            "scraped_at": "2025-12-18T07:14:15.512Z",
+            "scraped_at": "2025-12-19T07:13:28.169Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_10_1766042055512",
-            "nom": "Pharmacie DU BLED",
-            "adresse": "Yaoundé : Carrefour CARAMBA",
-            "quartier": "Carrefour CARAMBA",
+            "id": "ph_centre_2_1766128408169",
+            "nom": "Pharmacie SAINTE ANNE",
+            "adresse": "Yaoundé : FACE POLYCLINIQUE FOUDA- QUARTIER FOUDA",
+            "quartier": "FOUDA",
             "ville": "Yaoundé",
             "region": "Centre",
-            "tel": "674 43 15 22",
+            "tel": "696 48 84 87",
             "en_garde": true,
             "horaires": "20h00 - 08h00",
             "services": [
@@ -245,22 +125,22 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8484070215939536,
-              "lng": 11.502441831862408
+              "lat": 3.839003707807223,
+              "lng": 11.494734941609359
             },
-            "note": "4.9",
-            "scraped_at": "2025-12-18T07:14:15.512Z",
+            "note": "4.0",
+            "scraped_at": "2025-12-19T07:13:28.169Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_11_1766042055512",
-            "nom": "Pharmacie DU BIEN ETRE",
-            "adresse": "Yaoundé : ELIG-ESSONO ( FACE HOTEL GRAND MOULIN )",
-            "quartier": "ELIG-ESSONO (",
+            "id": "ph_centre_4_1766128408169",
+            "nom": "Pharmacie QUEENS",
+            "adresse": "Yaoundé : A Côté TRADEX Nkolbikok",
+            "quartier": "A Côté",
             "ville": "Yaoundé",
             "region": "Centre",
-            "tel": "677 33 80 28",
+            "tel": "242 12 91 13",
             "en_garde": true,
             "horaires": "20h00 - 08h00",
             "services": [
@@ -269,22 +149,22 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.848733883138922,
-              "lng": 11.496315503554502
+              "lat": 3.8571583206371653,
+              "lng": 11.501523764228265
             },
-            "note": "4.3",
-            "scraped_at": "2025-12-18T07:14:15.512Z",
+            "note": "4.0",
+            "scraped_at": "2025-12-19T07:13:28.169Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_14_1766042055513",
-            "nom": "Pharmacie DE L’ETOILE",
-            "adresse": "Yaoundé : MONTEE MAISON BLANCHE",
-            "quartier": "MONTEE MAISON",
+            "id": "ph_centre_5_1766128408169",
+            "nom": "Pharmacie PRIORITE SANTE",
+            "adresse": "Yaoundé : BRIGADE DE GENDARMERIE DE NKOLMESSENG",
+            "quartier": "BRIGADE DE",
             "ville": "Yaoundé",
             "region": "Centre",
-            "tel": "222 31 49 62",
+            "tel": "671 02 52 81",
             "en_garde": true,
             "horaires": "20h00 - 08h00",
             "services": [
@@ -293,22 +173,22 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.852962645729871,
-              "lng": 11.499266926175657
+              "lat": 3.846729212998719,
+              "lng": 11.510793041460401
             },
-            "note": "4.1",
-            "scraped_at": "2025-12-18T07:14:15.513Z",
+            "note": "4.7",
+            "scraped_at": "2025-12-19T07:13:28.170Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_18_1766042055513",
-            "nom": "Pharmacie BRUXELLOISE",
-            "adresse": "Yaoundé : Après la Station TRADEX EMANA",
-            "quartier": "Après la",
+            "id": "ph_centre_7_1766128408170",
+            "nom": "Pharmacie PALAIS",
+            "adresse": "Yaoundé : ETOUDI STATIONNEMENT",
+            "quartier": "ETOUDI STATIONNEMENT",
             "ville": "Yaoundé",
             "region": "Centre",
-            "tel": "242 17 38 63",
+            "tel": "691 54 16 18",
             "en_garde": true,
             "horaires": "20h00 - 08h00",
             "services": [
@@ -317,22 +197,22 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8432332199199517,
-              "lng": 11.49316254694912
+              "lat": 3.8491572870573463,
+              "lng": 11.507117465660679
             },
             "note": "4.2",
-            "scraped_at": "2025-12-18T07:14:15.513Z",
+            "scraped_at": "2025-12-19T07:13:28.170Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_20_1766042055513",
-            "nom": "Pharmacie ATHERA",
-            "adresse": "Yaoundé : TITI GARAGE RESIDENCE VERTE",
-            "quartier": "TITI GARAGE",
+            "id": "ph_centre_9_1766128408170",
+            "nom": "Pharmacie MELEN 8",
+            "adresse": "Yaoundé : CARREFOUR BIYEM-ASSI",
+            "quartier": "CARREFOUR BIYEM-ASSI",
             "ville": "Yaoundé",
             "region": "Centre",
-            "tel": "665 26 51 15",
+            "tel": "222 31 68 63",
             "en_garde": true,
             "horaires": "20h00 - 08h00",
             "services": [
@@ -341,22 +221,190 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8485270152379436,
-              "lng": 11.502303285813822
+              "lat": 3.839053401586239,
+              "lng": 11.496500710377969
             },
-            "note": "4.9",
-            "scraped_at": "2025-12-18T07:14:15.513Z",
+            "note": "3.8",
+            "scraped_at": "2025-12-19T07:13:28.170Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_23_1766042055513",
-            "nom": "Pharmacie 7 COLLINES",
-            "adresse": "Yaoundé : Immeuble FEUGUIF MINI FERME GOD’S GLORY PHARMACY SARL Yaoundé : entrée KOWEIT – ODZA",
+            "id": "ph_centre_10_1766128408170",
+            "nom": "Pharmacie MARIJOVA",
+            "adresse": "Yaoundé : ENTREE FACE MEEC ET DOVV-NVLLE ROUTE NKOLBISSONG",
+            "quartier": "ENTREE FACE",
+            "ville": "Yaoundé",
+            "region": "Centre",
+            "tel": "699 98 86 83",
+            "en_garde": true,
+            "horaires": "20h00 - 08h00",
+            "services": [
+              "Urgences",
+              "Médicaments",
+              "Conseil pharmaceutique"
+            ],
+            "coordinates": {
+              "lat": 3.8517935630068374,
+              "lng": 11.509526343573285
+            },
+            "note": "4.7",
+            "scraped_at": "2025-12-19T07:13:28.170Z",
+            "source": "DocHelp-CM",
+            "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
+          },
+          {
+            "id": "ph_centre_11_1766128408171",
+            "nom": "Pharmacie LE CRYSTALLIS",
+            "adresse": "Yaoundé : CARREF.ETOA MEKI",
+            "quartier": "CARREF.ETOA MEKI",
+            "ville": "Yaoundé",
+            "region": "Centre",
+            "tel": "242 71 05 86",
+            "en_garde": true,
+            "horaires": "20h00 - 08h00",
+            "services": [
+              "Urgences",
+              "Médicaments",
+              "Conseil pharmaceutique"
+            ],
+            "coordinates": {
+              "lat": 3.846343299478986,
+              "lng": 11.493036156854968
+            },
+            "note": "4.3",
+            "scraped_at": "2025-12-19T07:13:28.171Z",
+            "source": "DocHelp-CM",
+            "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
+          },
+          {
+            "id": "ph_centre_12_1766128408171",
+            "nom": "Pharmacie HERMES",
+            "adresse": "Yaoundé : FACE BOULANGERIE NEZAFI- EMANA",
+            "quartier": "FACE BOULANGERIE",
+            "ville": "Yaoundé",
+            "region": "Centre",
+            "tel": "243 64 11 81",
+            "en_garde": true,
+            "horaires": "20h00 - 08h00",
+            "services": [
+              "Urgences",
+              "Médicaments",
+              "Conseil pharmaceutique"
+            ],
+            "coordinates": {
+              "lat": 3.8464132096210886,
+              "lng": 11.49616754701892
+            },
+            "note": "3.8",
+            "scraped_at": "2025-12-19T07:13:28.171Z",
+            "source": "DocHelp-CM",
+            "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
+          },
+          {
+            "id": "ph_centre_13_1766128408171",
+            "nom": "Pharmacie ECOLE DE POLICE",
+            "adresse": "Yaoundé : ECOLE DE POLICE",
+            "quartier": "ECOLE DE",
+            "ville": "Yaoundé",
+            "region": "Centre",
+            "tel": "242 03 63 25",
+            "en_garde": true,
+            "horaires": "20h00 - 08h00",
+            "services": [
+              "Urgences",
+              "Médicaments",
+              "Conseil pharmaceutique"
+            ],
+            "coordinates": {
+              "lat": 3.8568893698379885,
+              "lng": 11.498748611011242
+            },
+            "note": "4.5",
+            "scraped_at": "2025-12-19T07:13:28.171Z",
+            "source": "DocHelp-CM",
+            "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
+          },
+          {
+            "id": "ph_centre_15_1766128408171",
+            "nom": "Pharmacie DE MVOG ATANGANA MBALLA",
+            "adresse": "Yaoundé : ENTREE MARCHE. MVOG-MBI",
+            "quartier": "ENTREE MARCHE.",
+            "ville": "Yaoundé",
+            "region": "Centre",
+            "tel": "222 30 67 85",
+            "en_garde": true,
+            "horaires": "20h00 - 08h00",
+            "services": [
+              "Urgences",
+              "Médicaments",
+              "Conseil pharmaceutique"
+            ],
+            "coordinates": {
+              "lat": 3.8540113965051295,
+              "lng": 11.500124786377954
+            },
+            "note": "4.2",
+            "scraped_at": "2025-12-19T07:13:28.171Z",
+            "source": "DocHelp-CM",
+            "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
+          },
+          {
+            "id": "ph_centre_16_1766128408171",
+            "nom": "Pharmacie DE LA VALLEE",
+            "adresse": "Yaoundé : CENTRE VILLE MARIE GOGKER",
+            "quartier": "CENTRE VILLE",
+            "ville": "Yaoundé",
+            "region": "Centre",
+            "tel": "697 20 84 76",
+            "en_garde": true,
+            "horaires": "20h00 - 08h00",
+            "services": [
+              "Urgences",
+              "Médicaments",
+              "Conseil pharmaceutique"
+            ],
+            "coordinates": {
+              "lat": 3.8553130029524367,
+              "lng": 11.511324305900786
+            },
+            "note": "4.8",
+            "scraped_at": "2025-12-19T07:13:28.171Z",
+            "source": "DocHelp-CM",
+            "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
+          },
+          {
+            "id": "ph_centre_18_1766128408171",
+            "nom": "Pharmacie DE LA JOUVENCE",
+            "adresse": "Yaoundé : RD Point Express BIYEM-ASSI",
+            "quartier": "RD Point",
+            "ville": "Yaoundé",
+            "region": "Centre",
+            "tel": "222 31 72 24",
+            "en_garde": true,
+            "horaires": "20h00 - 08h00",
+            "services": [
+              "Urgences",
+              "Médicaments",
+              "Conseil pharmaceutique"
+            ],
+            "coordinates": {
+              "lat": 3.844993882212185,
+              "lng": 11.509318434464982
+            },
+            "note": "3.6",
+            "scraped_at": "2025-12-19T07:13:28.171Z",
+            "source": "DocHelp-CM",
+            "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
+          },
+          {
+            "id": "ph_centre_19_1766128408172",
+            "nom": "Pharmacie de la FOI",
+            "adresse": "Yaoundé : PETIT MARCHÉ D’ODZA",
             "quartier": "ODZA",
             "ville": "Yaoundé",
             "region": "Centre",
-            "tel": "677 61 63 12",
+            "tel": "656 49 68 11",
             "en_garde": true,
             "horaires": "20h00 - 08h00",
             "services": [
@@ -365,11 +413,35 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8519400801630668,
-              "lng": 11.492845125407523
+              "lat": 3.839319512753689,
+              "lng": 11.50100439136437
             },
-            "note": "4.3",
-            "scraped_at": "2025-12-18T07:14:15.513Z",
+            "note": "4.8",
+            "scraped_at": "2025-12-19T07:13:28.172Z",
+            "source": "DocHelp-CM",
+            "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
+          },
+          {
+            "id": "ph_centre_23_1766128408172",
+            "nom": "Pharmacie BOTANIK",
+            "adresse": "Yaoundé : MIMBOMAN SHAKESPEARE",
+            "quartier": "MIMBOMAN SHAKESPEARE",
+            "ville": "Yaoundé",
+            "region": "Centre",
+            "tel": "697 62 05 06",
+            "en_garde": true,
+            "horaires": "20h00 - 08h00",
+            "services": [
+              "Urgences",
+              "Médicaments",
+              "Conseil pharmaceutique"
+            ],
+            "coordinates": {
+              "lat": 3.8552799061650744,
+              "lng": 11.499258530416837
+            },
+            "note": "3.8",
+            "scraped_at": "2025-12-19T07:13:28.172Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           }
@@ -379,7 +451,7 @@
         "ville": "Obala",
         "pharmacies": [
           {
-            "id": "ph_centre_2_1766042055511",
+            "id": "ph_centre_3_1766128408169",
             "nom": "Pharmacie SAINT THOMAS",
             "adresse": "Obala : OBALA",
             "quartier": "OBALA",
@@ -394,16 +466,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8543654685034126,
-              "lng": 11.504604151261395
+              "lat": 3.853385269521228,
+              "lng": 11.499379948622918
             },
-            "note": "4.9",
-            "scraped_at": "2025-12-18T07:14:15.511Z",
+            "note": "4.6",
+            "scraped_at": "2025-12-19T07:13:28.169Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_15_1766042055513",
+            "id": "ph_centre_20_1766128408172",
             "nom": "Pharmacie D’OBALA",
             "adresse": "Obala : OBALA",
             "quartier": "OBALA",
@@ -418,16 +490,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8460593737241258,
-              "lng": 11.507283858291068
+              "lat": 3.852586136616604,
+              "lng": 11.505212327565717
             },
-            "note": "3.6",
-            "scraped_at": "2025-12-18T07:14:15.513Z",
+            "note": "4.3",
+            "scraped_at": "2025-12-19T07:13:28.172Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_22_1766042055513",
+            "id": "ph_centre_26_1766128408172",
             "nom": "Pharmacie AFAMBA",
             "adresse": "Obala : OBALA : NOUVELLE GESTION",
             "quartier": "OBALA",
@@ -442,11 +514,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.84157615200964,
-              "lng": 11.498426676357525
+              "lat": 3.840029864676088,
+              "lng": 11.50992469327684
             },
-            "note": "4.3",
-            "scraped_at": "2025-12-18T07:14:15.513Z",
+            "note": "4.4",
+            "scraped_at": "2025-12-19T07:13:28.172Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           }
@@ -456,7 +528,7 @@
         "ville": "Sa'a",
         "pharmacies": [
           {
-            "id": "ph_centre_12_1766042055512",
+            "id": "ph_centre_14_1766128408171",
             "nom": "Pharmacie DE SA’A",
             "adresse": "Sa'a : SA’A",
             "quartier": "SA’A",
@@ -471,16 +543,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.855387581899458,
-              "lng": 11.507283156970416
+              "lat": 3.853991695422826,
+              "lng": 11.497891521464014
             },
             "note": "4.9",
-            "scraped_at": "2025-12-18T07:14:15.512Z",
+            "scraped_at": "2025-12-19T07:13:28.171Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_13_1766042055512",
+            "id": "ph_centre_17_1766128408171",
             "nom": "Pharmacie DE LA RENAISSANCE",
             "adresse": "Sa'a : SA’A",
             "quartier": "SA’A",
@@ -495,11 +567,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.848680853477046,
-              "lng": 11.50382699199224
+              "lat": 3.846804553309346,
+              "lng": 11.50888295716865
             },
-            "note": "4.0",
-            "scraped_at": "2025-12-18T07:14:15.512Z",
+            "note": "4.1",
+            "scraped_at": "2025-12-19T07:13:28.171Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           }
@@ -509,7 +581,7 @@
         "ville": "Mbandjock",
         "pharmacies": [
           {
-            "id": "ph_centre_16_1766042055513",
+            "id": "ph_centre_21_1766128408172",
             "nom": "Pharmacie CANNES",
             "adresse": "Mbandjock : MBANDJOCK",
             "quartier": "MBANDJOCK",
@@ -524,11 +596,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8547852544788817,
-              "lng": 11.497193692572656
+              "lat": 3.8519277282313316,
+              "lng": 11.49683931420625
             },
-            "note": "4.8",
-            "scraped_at": "2025-12-18T07:14:15.513Z",
+            "note": "3.7",
+            "scraped_at": "2025-12-19T07:13:28.172Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           }
@@ -538,7 +610,7 @@
         "ville": "Mbankomo",
         "pharmacies": [
           {
-            "id": "ph_centre_17_1766042055513",
+            "id": "ph_centre_22_1766128408172",
             "nom": "Pharmacie CAMERIC",
             "adresse": "Mbankomo : MBANKOMO",
             "quartier": "MBANKOMO",
@@ -553,11 +625,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8510324225351953,
-              "lng": 11.511342128181196
+              "lat": 3.851627714051869,
+              "lng": 11.51034096764996
             },
-            "note": "3.8",
-            "scraped_at": "2025-12-18T07:14:15.513Z",
+            "note": "4.6",
+            "scraped_at": "2025-12-19T07:13:28.172Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           }
@@ -567,7 +639,7 @@
         "ville": "Bafia",
         "pharmacies": [
           {
-            "id": "ph_centre_19_1766042055513",
+            "id": "ph_centre_24_1766128408172",
             "nom": "Pharmacie BASIA",
             "adresse": "Bafia : BAFIA",
             "quartier": "BAFIA",
@@ -582,16 +654,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.839849359047873,
-              "lng": 11.511230312492971
+              "lat": 3.8393040218392254,
+              "lng": 11.505669098868161
             },
-            "note": "3.9",
-            "scraped_at": "2025-12-18T07:14:15.513Z",
+            "note": "4.4",
+            "scraped_at": "2025-12-19T07:13:28.172Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_21_1766042055513",
+            "id": "ph_centre_25_1766128408172",
             "nom": "Pharmacie AIDA",
             "adresse": "Bafia : BAFIA",
             "quartier": "BAFIA",
@@ -606,11 +678,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.845239272991398,
-              "lng": 11.510529459212039
+              "lat": 3.8485438893799615,
+              "lng": 11.495614414394101
             },
-            "note": "3.6",
-            "scraped_at": "2025-12-18T07:14:15.513Z",
+            "note": "4.7",
+            "scraped_at": "2025-12-19T07:13:28.172Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           }
@@ -622,103 +694,7 @@
         "ville": "Douala",
         "pharmacies": [
           {
-            "id": "ph_littoral_0_1766042056932",
-            "nom": "Pharmacie VERTUS",
-            "adresse": "Douala : CARREFOUR IPPB BOUNAMOUSSADI",
-            "quartier": "CARREFOUR IPPB",
-            "ville": "Douala",
-            "region": "Littoral",
-            "tel": "233 47 80 18",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 4.058749534777813,
-              "lng": 9.76654436158612
-            },
-            "note": "4.9",
-            "scraped_at": "2025-12-18T07:14:16.932Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
-          },
-          {
-            "id": "ph_littoral_1_1766042056932",
-            "nom": "Pharmacie STE MARIE",
-            "adresse": "Douala : AXE LOURD DLA YDE",
-            "quartier": "AXE LOURD",
-            "ville": "Douala",
-            "region": "Littoral",
-            "tel": "672 93 37 92",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 4.0603817031396625,
-              "lng": 9.759270270352674
-            },
-            "note": "4.9",
-            "scraped_at": "2025-12-18T07:14:16.932Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
-          },
-          {
-            "id": "ph_littoral_2_1766042056932",
-            "nom": "Pharmacie RUE KOLOKO",
-            "adresse": "Douala : Rue Koloko Cimed",
-            "quartier": "Rue Koloko",
-            "ville": "Douala",
-            "region": "Littoral",
-            "tel": "674 44 77 15",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 4.050105168896235,
-              "lng": 9.764030051095084
-            },
-            "note": "4.8",
-            "scraped_at": "2025-12-18T07:14:16.932Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
-          },
-          {
-            "id": "ph_littoral_3_1766042056932",
-            "nom": "Pharmacie RAIL",
-            "adresse": "Douala : Marché Nkololoun",
-            "quartier": "Marché Nkololoun",
-            "ville": "Douala",
-            "region": "Littoral",
-            "tel": "233 14 03 25",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 4.05401620779865,
-              "lng": 9.765995963278353
-            },
-            "note": "4.4",
-            "scraped_at": "2025-12-18T07:14:16.932Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
-          },
-          {
-            "id": "ph_littoral_4_1766042056932",
+            "id": "ph_littoral_0_1766128409592",
             "nom": "Pharmacie LA VITA",
             "adresse": "Douala : Nyala entrée école",
             "quartier": "Nyala entrée",
@@ -733,227 +709,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.042511957450835,
-              "lng": 9.768309860631993
+              "lat": 4.0434564825097405,
+              "lng": 9.762091259660897
             },
-            "note": "3.7",
-            "scraped_at": "2025-12-18T07:14:16.932Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
-          },
-          {
-            "id": "ph_littoral_5_1766042056932",
-            "nom": "Pharmacie LA PATIENCE",
-            "adresse": "Douala : CARREFOUR SNEC MAKEPE",
-            "quartier": "MAKEPE",
-            "ville": "Douala",
-            "region": "Littoral",
-            "tel": "233 47 26 84",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 4.046791830676255,
-              "lng": 9.77312393843954
-            },
-            "note": "5.0",
-            "scraped_at": "2025-12-18T07:14:16.932Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
-          },
-          {
-            "id": "ph_littoral_6_1766042056932",
-            "nom": "Pharmacie LA COTE",
-            "adresse": "Douala : ESSAO Bali",
-            "quartier": "ESSAO Bali",
-            "ville": "Douala",
-            "region": "Littoral",
-            "tel": "233 42 64 57",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 4.054297115835824,
-              "lng": 9.758428784607945
-            },
-            "note": "4.4",
-            "scraped_at": "2025-12-18T07:14:16.932Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
-          },
-          {
-            "id": "ph_littoral_7_1766042056932",
-            "nom": "Pharmacie JOUVENCE",
-            "adresse": "Douala : RUE KING AKWA",
-            "quartier": "AKWA",
-            "ville": "Douala",
-            "region": "Littoral",
-            "tel": "233 42 47 79",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 4.050459311826255,
-              "lng": 9.765869197108696
-            },
-            "note": "3.8",
-            "scraped_at": "2025-12-18T07:14:16.932Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
-          },
-          {
-            "id": "ph_littoral_8_1766042056932",
-            "nom": "Pharmacie INTERNATIONALE",
-            "adresse": "Douala : Carrefour PK 14",
-            "quartier": "Carrefour PK",
-            "ville": "Douala",
-            "region": "Littoral",
-            "tel": "243 81 18 18",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 4.054639507145276,
-              "lng": 9.758695079562774
-            },
-            "note": "4.4",
-            "scraped_at": "2025-12-18T07:14:16.932Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
-          },
-          {
-            "id": "ph_littoral_9_1766042056932",
-            "nom": "Pharmacie GENIE",
-            "adresse": "Douala : Marché Madagascar",
-            "quartier": "Marché Madagascar",
-            "ville": "Douala",
-            "region": "Littoral",
-            "tel": "233 42 64 57",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 4.055746163147516,
-              "lng": 9.760172040904315
-            },
-            "note": "4.1",
-            "scraped_at": "2025-12-18T07:14:16.932Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
-          },
-          {
-            "id": "ph_littoral_10_1766042056932",
-            "nom": "Pharmacie ESPOIR",
-            "adresse": "Douala : RUE MONKAM BAR",
-            "quartier": "RUE MONKAM",
-            "ville": "Douala",
-            "region": "Littoral",
-            "tel": "233 42 79 82",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 4.055221689220492,
-              "lng": 9.764394196766188
-            },
-            "note": "3.9",
-            "scraped_at": "2025-12-18T07:14:16.932Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
-          },
-          {
-            "id": "ph_littoral_12_1766042056932",
-            "nom": "Pharmacie CONCORDE",
-            "adresse": "Douala : DIRECTION ORANGE AKWA",
-            "quartier": "AKWA",
-            "ville": "Douala",
-            "region": "Littoral",
-            "tel": "233 43 49 29",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 4.0434309665941806,
-              "lng": 9.76336284718295
-            },
-            "note": "3.8",
-            "scraped_at": "2025-12-18T07:14:16.932Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
-          },
-          {
-            "id": "ph_littoral_13_1766042056932",
-            "nom": "Pharmacie CARREFOUR Z",
-            "adresse": "Douala : CARREFOUR ZACHEMAN NDOGBONG",
-            "quartier": "CARREFOUR ZACHEMAN",
-            "ville": "Douala",
-            "region": "Littoral",
-            "tel": "242 82 34 18",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 4.043817665055064,
-              "lng": 9.762024405742235
-            },
-            "note": "4.0",
-            "scraped_at": "2025-12-18T07:14:16.933Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
-          },
-          {
-            "id": "ph_littoral_14_1766042056933",
-            "nom": "Pharmacie BOURSE",
-            "adresse": "Douala : Grand moulin Deido BLESSING PHARMACY Douala : STATION BLESSING STADE",
-            "quartier": "Deido",
-            "ville": "Douala",
-            "region": "Littoral",
-            "tel": "233 06 00 48",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 4.059031288531313,
-              "lng": 9.75996914584949
-            },
-            "note": "4.8",
-            "scraped_at": "2025-12-18T07:14:16.933Z",
+            "note": "4.6",
+            "scraped_at": "2025-12-19T07:13:29.592Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           }
@@ -963,10 +723,10 @@
         "ville": "Loum",
         "pharmacies": [
           {
-            "id": "ph_littoral_11_1766042056932",
+            "id": "ph_littoral_1_1766128409593",
             "nom": "PHARMACIE DE LOUM",
-            "adresse": "Loum",
-            "quartier": "Non précisé",
+            "adresse": "Loum :",
+            "quartier": "",
             "ville": "Loum",
             "region": "Littoral",
             "tel": "233 49 35 45",
@@ -978,96 +738,18 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.046628140866516,
-              "lng": 9.761060627325392
+              "lat": 4.059193782486962,
+              "lng": 9.767253130302125
             },
-            "note": "4.2",
-            "scraped_at": "2025-12-18T07:14:16.932Z",
+            "note": "4.3",
+            "scraped_at": "2025-12-19T07:13:29.593Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           }
         ]
       }
     ],
-    "Ouest": [
-      {
-        "ville": "Bafoussam",
-        "pharmacies": [
-          {
-            "id": "ph_ouest_0_1766042058330",
-            "nom": "Pharmacie PANACE",
-            "adresse": "Bafoussam : RUE DE LA LÉPROSERIE",
-            "quartier": "RUE DE",
-            "ville": "Bafoussam",
-            "region": "Ouest",
-            "tel": "696 91 35 79",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 5.479469371937428,
-              "lng": 10.423975271352052
-            },
-            "note": "4.6",
-            "scraped_at": "2025-12-18T07:14:18.330Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/ouest/"
-          },
-          {
-            "id": "ph_ouest_1_1766042058330",
-            "nom": "Pharmacie MADELON",
-            "adresse": "Bafoussam : Carrefour Madelon",
-            "quartier": "Carrefour Madelon",
-            "ville": "Bafoussam",
-            "region": "Ouest",
-            "tel": "233 44 62 62",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 5.474221056243919,
-              "lng": 10.41624146604507
-            },
-            "note": "4.3",
-            "scraped_at": "2025-12-18T07:14:18.330Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/ouest/"
-          },
-          {
-            "id": "ph_ouest_2_1766042058330",
-            "nom": "Pharmacie BINAM",
-            "adresse": "Bafoussam : ROUTE FOUMBAN",
-            "quartier": "ROUTE FOUMBAN",
-            "ville": "Bafoussam",
-            "region": "Ouest",
-            "tel": "233 44 25 55",
-            "en_garde": true,
-            "horaires": "20h00 - 08h00",
-            "services": [
-              "Urgences",
-              "Médicaments",
-              "Conseil pharmaceutique"
-            ],
-            "coordinates": {
-              "lat": 5.486788237573026,
-              "lng": 10.42329106983816
-            },
-            "note": "3.9",
-            "scraped_at": "2025-12-18T07:14:18.330Z",
-            "source": "DocHelp-CM",
-            "source_url": "https://www.dochelp-cm.org/listing-location/ouest/"
-          }
-        ]
-      }
-    ],
+    "Ouest": [],
     "Nord-Ouest": [],
     "Sud-Ouest": [],
     "Adamaoua": [
@@ -1075,7 +757,7 @@
         "ville": "Ngaoundéré",
         "pharmacies": [
           {
-            "id": "ph_adamaoua_0_1766042062035",
+            "id": "ph_adamaoua_0_1766128414536",
             "nom": "Pharmacie LA VINA",
             "adresse": "Ngaoundéré() : Ngaoundere",
             "quartier": "Ngaoundere",
@@ -1090,16 +772,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 7.320741026309173,
-              "lng": 13.58456862864372
+              "lat": 7.319627461683968,
+              "lng": 13.577449549258397
             },
-            "note": "4.1",
-            "scraped_at": "2025-12-18T07:14:22.035Z",
+            "note": "4.9",
+            "scraped_at": "2025-12-19T07:13:34.536Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/adamaoua/"
           },
           {
-            "id": "ph_adamaoua_1_1766042062035",
+            "id": "ph_adamaoua_1_1766128414536",
             "nom": "Pharmacie GRAND MARCHÉ NGAOUNDERE",
             "adresse": "Ngaoundéré() : Ngaoundere",
             "quartier": "Ngaoundere",
@@ -1114,16 +796,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 7.318480557419386,
-              "lng": 13.57753569148524
+              "lat": 7.321973590571479,
+              "lng": 13.58349612469645
             },
-            "note": "4.0",
-            "scraped_at": "2025-12-18T07:14:22.035Z",
+            "note": "4.9",
+            "scraped_at": "2025-12-19T07:13:34.536Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/adamaoua/"
           },
           {
-            "id": "ph_adamaoua_3_1766042062035",
+            "id": "ph_adamaoua_3_1766128414536",
             "nom": "Pharmacie DE LA GARE NGAOUNDERE",
             "adresse": "Ngaoundéré() : Ngaoundere",
             "quartier": "Ngaoundere",
@@ -1138,16 +820,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 7.306964898402947,
-              "lng": 13.574665090310265
+              "lat": 7.310148339152785,
+              "lng": 13.575528376827613
             },
-            "note": "4.1",
-            "scraped_at": "2025-12-18T07:14:22.035Z",
+            "note": "3.8",
+            "scraped_at": "2025-12-19T07:13:34.536Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/adamaoua/"
           },
           {
-            "id": "ph_adamaoua_4_1766042062035",
+            "id": "ph_adamaoua_4_1766128414536",
             "nom": "Pharmacie DE L’ESPÉRANCE",
             "adresse": "Ngaoundéré() : Ngaoundere",
             "quartier": "Ngaoundere",
@@ -1162,16 +844,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 7.316153990794902,
-              "lng": 13.575412674768792
+              "lat": 7.326225396666734,
+              "lng": 13.573819620781064
             },
-            "note": "4.2",
-            "scraped_at": "2025-12-18T07:14:22.035Z",
+            "note": "4.1",
+            "scraped_at": "2025-12-19T07:13:34.536Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/adamaoua/"
           },
           {
-            "id": "ph_adamaoua_5_1766042062035",
+            "id": "ph_adamaoua_5_1766128414536",
             "nom": "Pharmacie DE L’ENTENTE",
             "adresse": "Ngaoundéré() : Ngaoundere",
             "quartier": "Ngaoundere",
@@ -1186,16 +868,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 7.325588687166727,
-              "lng": 13.58825225471216
+              "lat": 7.31199982132971,
+              "lng": 13.575140016921129
             },
-            "note": "4.5",
-            "scraped_at": "2025-12-18T07:14:22.035Z",
+            "note": "4.2",
+            "scraped_at": "2025-12-19T07:13:34.536Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/adamaoua/"
           },
           {
-            "id": "ph_adamaoua_6_1766042062035",
+            "id": "ph_adamaoua_6_1766128414536",
             "nom": "Pharmacie CARREFOUR AOUDI",
             "adresse": "Ngaoundéré() : Ngaoundere",
             "quartier": "Ngaoundere",
@@ -1210,16 +892,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 7.314516690278308,
-              "lng": 13.589441173865277
+              "lat": 7.3072312931105445,
+              "lng": 13.591883790331146
             },
-            "note": "4.5",
-            "scraped_at": "2025-12-18T07:14:22.035Z",
+            "note": "3.5",
+            "scraped_at": "2025-12-19T07:13:34.536Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/adamaoua/"
           },
           {
-            "id": "ph_adamaoua_7_1766042062035",
+            "id": "ph_adamaoua_7_1766128414536",
             "nom": "Pharmacie ADAMA",
             "adresse": "Ngaoundéré() : Ngaoundere",
             "quartier": "Ngaoundere",
@@ -1234,11 +916,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 7.3156082244810445,
-              "lng": 13.580155963567082
+              "lat": 7.32302513572954,
+              "lng": 13.583345941586346
             },
-            "note": "3.7",
-            "scraped_at": "2025-12-18T07:14:22.035Z",
+            "note": "4.0",
+            "scraped_at": "2025-12-19T07:13:34.536Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/adamaoua/"
           }
@@ -1248,7 +930,7 @@
         "ville": "Banyo",
         "pharmacies": [
           {
-            "id": "ph_adamaoua_2_1766042062035",
+            "id": "ph_adamaoua_2_1766128414536",
             "nom": "Pharmacie du MAYO BANYO",
             "adresse": "Banyo : BANYO",
             "quartier": "BANYO",
@@ -1263,11 +945,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 7.311702950195249,
-              "lng": 13.57474354691842
+              "lat": 7.3258191808692,
+              "lng": 13.590156700896918
             },
-            "note": "4.0",
-            "scraped_at": "2025-12-18T07:14:22.035Z",
+            "note": "4.7",
+            "scraped_at": "2025-12-19T07:13:34.536Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/adamaoua/"
           }
