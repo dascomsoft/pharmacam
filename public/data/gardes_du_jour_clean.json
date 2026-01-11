@@ -1,7 +1,7 @@
 {
-  "id": "scrape_1768029060103",
-  "maj": "2026-01-10T07:11:00.103Z",
-  "periode": "du samedi 10 janvier 2026 20h00 au dimanche 11 janvier 2026 08h00",
+  "id": "scrape_1768115579657",
+  "maj": "2026-01-11T07:12:59.657Z",
+  "periode": "du dimanche 11 janvier 2026 20h00 au lundi 12 janvier 2026 08h00",
   "total": 35,
   "regions": {
     "Centre": [
@@ -9,7 +9,7 @@
         "ville": "Mbalmayo",
         "pharmacies": [
           {
-            "id": "ph_centre_0_1768029062828",
+            "id": "ph_centre_0_1768115582882",
             "nom": "Pharmacie VIMLI",
             "adresse": "Mbalmayo : MBALMAYO",
             "quartier": "MBALMAYO",
@@ -24,16 +24,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8539169338785735,
-              "lng": 11.498314347562646
+              "lat": 3.8442590727540917,
+              "lng": 11.49242968695652
             },
-            "note": "3.8",
-            "scraped_at": "2026-01-10T07:11:02.828Z",
+            "note": "4.1",
+            "scraped_at": "2026-01-11T07:13:02.882Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_2_1768029062829",
+            "id": "ph_centre_2_1768115582883",
             "nom": "Pharmacie PATIENCE",
             "adresse": "Mbalmayo : MBALMAYO",
             "quartier": "MBALMAYO",
@@ -48,16 +48,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8427690842886975,
-              "lng": 11.495461972512205
+              "lat": 3.851248999134619,
+              "lng": 11.505097187061194
             },
-            "note": "4.4",
-            "scraped_at": "2026-01-10T07:11:02.829Z",
+            "note": "4.5",
+            "scraped_at": "2026-01-11T07:13:02.883Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_3_1768029062829",
+            "id": "ph_centre_3_1768115582883",
             "nom": "Pharmacie NYONG",
             "adresse": "Mbalmayo : MBALMAYO",
             "quartier": "MBALMAYO",
@@ -72,11 +72,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8449098065712826,
-              "lng": 11.492988201738306
+              "lat": 3.8503608768946758,
+              "lng": 11.498594287244762
             },
-            "note": "3.7",
-            "scraped_at": "2026-01-10T07:11:02.829Z",
+            "note": "4.4",
+            "scraped_at": "2026-01-11T07:13:02.883Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           }
@@ -86,7 +86,7 @@
         "ville": "Obala",
         "pharmacies": [
           {
-            "id": "ph_centre_1_1768029062829",
+            "id": "ph_centre_1_1768115582883",
             "nom": "Pharmacie SAINT THOMAS",
             "adresse": "Obala : OBALA",
             "quartier": "OBALA",
@@ -101,16 +101,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.85085463052699,
-              "lng": 11.506864602497025
+              "lat": 3.8440597804650936,
+              "lng": 11.51162076875675
             },
-            "note": "4.2",
-            "scraped_at": "2026-01-10T07:11:02.829Z",
+            "note": "4.0",
+            "scraped_at": "2026-01-11T07:13:02.883Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_6_1768029062829",
+            "id": "ph_centre_6_1768115582883",
             "nom": "Pharmacie D’OBALA",
             "adresse": "Obala : OBALA",
             "quartier": "OBALA",
@@ -125,16 +125,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.855663219746852,
-              "lng": 11.504540530422755
+              "lat": 3.850876184261851,
+              "lng": 11.504539969035108
             },
-            "note": "3.9",
-            "scraped_at": "2026-01-10T07:11:02.829Z",
+            "note": "4.9",
+            "scraped_at": "2026-01-11T07:13:02.883Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_11_1768029062830",
+            "id": "ph_centre_11_1768115582884",
             "nom": "Pharmacie AFAMBA",
             "adresse": "Obala : OBALA : NOUVELLE GESTION",
             "quartier": "OBALA",
@@ -149,11 +149,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.847096704976292,
-              "lng": 11.50242132597324
+              "lat": 3.856197407441937,
+              "lng": 11.50170174298803
             },
-            "note": "4.1",
-            "scraped_at": "2026-01-10T07:11:02.830Z",
+            "note": "3.9",
+            "scraped_at": "2026-01-11T07:13:02.884Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           }
@@ -163,7 +163,7 @@
         "ville": "Sa'a",
         "pharmacies": [
           {
-            "id": "ph_centre_4_1768029062829",
+            "id": "ph_centre_4_1768115582883",
             "nom": "Pharmacie DE SA’A",
             "adresse": "Sa'a : SA’A",
             "quartier": "SA’A",
@@ -178,16 +178,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8469914903241165,
-              "lng": 11.501133255827469
+              "lat": 3.85352599718608,
+              "lng": 11.494286475964858
             },
-            "note": "4.3",
-            "scraped_at": "2026-01-10T07:11:02.829Z",
+            "note": "4.2",
+            "scraped_at": "2026-01-11T07:13:02.883Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_5_1768029062829",
+            "id": "ph_centre_5_1768115582883",
             "nom": "Pharmacie DE LA RENAISSANCE",
             "adresse": "Sa'a : SA’A",
             "quartier": "SA’A",
@@ -202,11 +202,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8531494984827885,
-              "lng": 11.500471522853696
+              "lat": 3.855697016046225,
+              "lng": 11.50604984287734
             },
-            "note": "4.8",
-            "scraped_at": "2026-01-10T07:11:02.829Z",
+            "note": "3.6",
+            "scraped_at": "2026-01-11T07:13:02.883Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           }
@@ -216,7 +216,7 @@
         "ville": "Mbandjock",
         "pharmacies": [
           {
-            "id": "ph_centre_7_1768029062829",
+            "id": "ph_centre_7_1768115582883",
             "nom": "Pharmacie CANNES",
             "adresse": "Mbandjock : MBANDJOCK",
             "quartier": "MBANDJOCK",
@@ -231,11 +231,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.8427367021884433,
-              "lng": 11.50671612404247
+              "lat": 3.84311648226489,
+              "lng": 11.503367603011453
             },
-            "note": "4.5",
-            "scraped_at": "2026-01-10T07:11:02.829Z",
+            "note": "4.9",
+            "scraped_at": "2026-01-11T07:13:02.883Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           }
@@ -245,7 +245,7 @@
         "ville": "Mbankomo",
         "pharmacies": [
           {
-            "id": "ph_centre_8_1768029062829",
+            "id": "ph_centre_8_1768115582883",
             "nom": "Pharmacie CAMERIC",
             "adresse": "Mbankomo : MBANKOMO",
             "quartier": "MBANKOMO",
@@ -260,11 +260,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.840701468941927,
-              "lng": 11.497236231857002
+              "lat": 3.841452451901932,
+              "lng": 11.49685151513554
             },
-            "note": "4.0",
-            "scraped_at": "2026-01-10T07:11:02.829Z",
+            "note": "4.5",
+            "scraped_at": "2026-01-11T07:13:02.884Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           }
@@ -274,7 +274,7 @@
         "ville": "Bafia",
         "pharmacies": [
           {
-            "id": "ph_centre_9_1768029062830",
+            "id": "ph_centre_9_1768115582884",
             "nom": "Pharmacie BASIA",
             "adresse": "Bafia : BAFIA",
             "quartier": "BAFIA",
@@ -289,16 +289,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.842893920760726,
-              "lng": 11.502317063194752
+              "lat": 3.8533168446678427,
+              "lng": 11.50989281279329
             },
-            "note": "3.8",
-            "scraped_at": "2026-01-10T07:11:02.830Z",
+            "note": "3.9",
+            "scraped_at": "2026-01-11T07:13:02.884Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           },
           {
-            "id": "ph_centre_10_1768029062830",
+            "id": "ph_centre_10_1768115582884",
             "nom": "Pharmacie AIDA",
             "adresse": "Bafia : BAFIA",
             "quartier": "BAFIA",
@@ -313,11 +313,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 3.848534773372425,
-              "lng": 11.512014746969509
+              "lat": 3.850700517212326,
+              "lng": 11.501939629213899
             },
-            "note": "3.6",
-            "scraped_at": "2026-01-10T07:11:02.830Z",
+            "note": "4.2",
+            "scraped_at": "2026-01-11T07:13:02.884Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/centre/"
           }
@@ -329,7 +329,7 @@
         "ville": "Douala",
         "pharmacies": [
           {
-            "id": "ph_littoral_0_1768029064308",
+            "id": "ph_littoral_0_1768115584420",
             "nom": "VOTRE Pharmacie",
             "adresse": "Douala : MARCHE BONAMOUSSADI",
             "quartier": "MARCHE BONAMOUSSADI",
@@ -344,16 +344,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.057071772990014,
-              "lng": 9.769741414438487
+              "lat": 4.060469830593942,
+              "lng": 9.771984315354759
             },
-            "note": "3.7",
-            "scraped_at": "2026-01-10T07:11:04.308Z",
+            "note": "4.3",
+            "scraped_at": "2026-01-11T07:13:04.420Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           },
           {
-            "id": "ph_littoral_1_1768029064308",
+            "id": "ph_littoral_1_1768115584420",
             "nom": "Pharmacie YASSA",
             "adresse": "Douala : Tradex Yassa",
             "quartier": "Tradex Yassa",
@@ -368,16 +368,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.050837186344858,
-              "lng": 9.765790806237366
+              "lat": 4.049280557097978,
+              "lng": 9.769779154385033
             },
-            "note": "4.0",
-            "scraped_at": "2026-01-10T07:11:04.308Z",
+            "note": "3.7",
+            "scraped_at": "2026-01-11T07:13:04.420Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           },
           {
-            "id": "ph_littoral_2_1768029064308",
+            "id": "ph_littoral_2_1768115584420",
             "nom": "Pharmacie ST PIERRE",
             "adresse": "Douala : FACE COLLEGE POZAM BONADIWOTO",
             "quartier": "FACE COLLEGE",
@@ -392,16 +392,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.051263106214483,
-              "lng": 9.774896069037158
+              "lat": 4.061094658173018,
+              "lng": 9.767977560853767
             },
-            "note": "3.6",
-            "scraped_at": "2026-01-10T07:11:04.308Z",
+            "note": "3.7",
+            "scraped_at": "2026-01-11T07:13:04.420Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           },
           {
-            "id": "ph_littoral_3_1768029064308",
+            "id": "ph_littoral_3_1768115584420",
             "nom": "Pharmacie SHAMMAH",
             "adresse": "Douala : Total Logbaba",
             "quartier": "Total Logbaba",
@@ -416,16 +416,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.042619514950704,
-              "lng": 9.767117160782423
+              "lat": 4.051970864589788,
+              "lng": 9.770613308846999
             },
             "note": "3.9",
-            "scraped_at": "2026-01-10T07:11:04.308Z",
+            "scraped_at": "2026-01-11T07:13:04.420Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           },
           {
-            "id": "ph_littoral_4_1768029064308",
+            "id": "ph_littoral_4_1768115584420",
             "nom": "Pharmacie SAINT JOSUE",
             "adresse": "Douala : Immeuble Saker Usine CCC",
             "quartier": "Immeuble Saker",
@@ -440,16 +440,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.053944805555411,
-              "lng": 9.772786296148494
+              "lat": 4.047237592353615,
+              "lng": 9.774562060386843
             },
-            "note": "4.8",
-            "scraped_at": "2026-01-10T07:11:04.308Z",
+            "note": "4.3",
+            "scraped_at": "2026-01-11T07:13:04.420Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           },
           {
-            "id": "ph_littoral_5_1768029064308",
+            "id": "ph_littoral_5_1768115584420",
             "nom": "Pharmacie PORTIQUE",
             "adresse": "Douala : Place des portiques",
             "quartier": "Place des",
@@ -464,16 +464,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.043582126408086,
-              "lng": 9.771495267134997
+              "lat": 4.04569506366619,
+              "lng": 9.77488128320399
             },
-            "note": "3.9",
-            "scraped_at": "2026-01-10T07:11:04.308Z",
+            "note": "4.2",
+            "scraped_at": "2026-01-11T07:13:04.420Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           },
           {
-            "id": "ph_littoral_6_1768029064308",
+            "id": "ph_littoral_6_1768115584420",
             "nom": "Pharmacie OUAMBO VICTOR",
             "adresse": "Douala : Axe lourd Yde avant 1er Total",
             "quartier": "Axe lourd",
@@ -488,16 +488,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.0525970183415225,
-              "lng": 9.75845440583649
+              "lat": 4.054323555167631,
+              "lng": 9.762306709463225
             },
-            "note": "3.7",
-            "scraped_at": "2026-01-10T07:11:04.308Z",
+            "note": "3.5",
+            "scraped_at": "2026-01-11T07:13:04.420Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           },
           {
-            "id": "ph_littoral_7_1768029064308",
+            "id": "ph_littoral_7_1768115584420",
             "nom": "Pharmacie MAKEPE",
             "adresse": "Douala : MAKEPE EGLISE EVANGELIQUE",
             "quartier": "MAKEPE",
@@ -512,16 +512,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.054639458619794,
-              "lng": 9.764994096752314
+              "lat": 4.055110585660788,
+              "lng": 9.771728864145341
             },
-            "note": "4.8",
-            "scraped_at": "2026-01-10T07:11:04.308Z",
+            "note": "4.0",
+            "scraped_at": "2026-01-11T07:13:04.420Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           },
           {
-            "id": "ph_littoral_8_1768029064308",
+            "id": "ph_littoral_8_1768115584421",
             "nom": "Pharmacie JAMOT",
             "adresse": "Douala : FACE ECOLE PUBLIQUE D’AKWA",
             "quartier": "AKWA",
@@ -536,16 +536,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.060674106889649,
-              "lng": 9.771512157251248
+              "lat": 4.049442141030219,
+              "lng": 9.771647614793828
             },
-            "note": "4.3",
-            "scraped_at": "2026-01-10T07:11:04.308Z",
+            "note": "3.8",
+            "scraped_at": "2026-01-11T07:13:04.421Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           },
           {
-            "id": "ph_littoral_9_1768029064308",
+            "id": "ph_littoral_9_1768115584421",
             "nom": "Pharmacie GABELOU",
             "adresse": "Douala : Mobile Njo Njo rue des manguiers",
             "quartier": "Mobile Njo",
@@ -560,16 +560,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.059166496259002,
-              "lng": 9.766769942895333
+              "lat": 4.044726944259146,
+              "lng": 9.774773459742903
             },
-            "note": "4.9",
-            "scraped_at": "2026-01-10T07:11:04.308Z",
+            "note": "3.8",
+            "scraped_at": "2026-01-11T07:13:04.421Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           },
           {
-            "id": "ph_littoral_10_1768029064308",
+            "id": "ph_littoral_10_1768115584421",
             "nom": "Pharmacie FRIENDSHIP",
             "adresse": "Douala : SAKER BEEDI",
             "quartier": "SAKER BEEDI",
@@ -584,16 +584,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.052346640877901,
-              "lng": 9.76301976991794
+              "lat": 4.048414884001691,
+              "lng": 9.774650420858924
             },
-            "note": "4.7",
-            "scraped_at": "2026-01-10T07:11:04.308Z",
+            "note": "4.2",
+            "scraped_at": "2026-01-11T07:13:04.421Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           },
           {
-            "id": "ph_littoral_11_1768029064308",
+            "id": "ph_littoral_11_1768115584421",
             "nom": "Pharmacie EXPRESS",
             "adresse": "Douala : Ancienne Sonel Nkolouloun",
             "quartier": "Ancienne Sonel",
@@ -608,16 +608,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.05667366443206,
-              "lng": 9.776785095095606
+              "lat": 4.047484577608141,
+              "lng": 9.767686296742987
             },
-            "note": "4.7",
-            "scraped_at": "2026-01-10T07:11:04.308Z",
+            "note": "5.0",
+            "scraped_at": "2026-01-11T07:13:04.421Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           },
           {
-            "id": "ph_littoral_12_1768029064308",
+            "id": "ph_littoral_12_1768115584421",
             "nom": "Pharmacie ESSEC",
             "adresse": "Douala : ESSEC",
             "quartier": "ESSEC",
@@ -632,16 +632,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.059641152108662,
-              "lng": 9.771099445019807
+              "lat": 4.060897228536541,
+              "lng": 9.764142526259805
             },
-            "note": "3.7",
-            "scraped_at": "2026-01-10T07:11:04.308Z",
+            "note": "4.7",
+            "scraped_at": "2026-01-11T07:13:04.421Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           },
           {
-            "id": "ph_littoral_13_1768029064308",
+            "id": "ph_littoral_13_1768115584421",
             "nom": "Pharmacie DE GAULLE",
             "adresse": "Douala : Avenue de Gaulle",
             "quartier": "Avenue de",
@@ -656,16 +656,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.045992319945915,
-              "lng": 9.772402739081306
+              "lat": 4.051455291403528,
+              "lng": 9.776419312451694
             },
-            "note": "4.3",
-            "scraped_at": "2026-01-10T07:11:04.308Z",
+            "note": "3.6",
+            "scraped_at": "2026-01-11T07:13:04.421Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           },
           {
-            "id": "ph_littoral_14_1768029064308",
+            "id": "ph_littoral_14_1768115584421",
             "nom": "Pharmacie CHARISMA",
             "adresse": "Douala : COMMISSARIAT 12 BONNAMOUSADI",
             "quartier": "COMMISSARIAT 12",
@@ -680,11 +680,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 4.057800289083834,
-              "lng": 9.775942299015641
+              "lat": 4.057103106041848,
+              "lng": 9.758677797250854
             },
-            "note": "4.1",
-            "scraped_at": "2026-01-10T07:11:04.308Z",
+            "note": "4.6",
+            "scraped_at": "2026-01-11T07:13:04.421Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/littoral/"
           }
@@ -699,7 +699,7 @@
         "ville": "Ngaoundéré",
         "pharmacies": [
           {
-            "id": "ph_adamaoua_0_1768029069558",
+            "id": "ph_adamaoua_0_1768115589650",
             "nom": "Pharmacie LA VINA",
             "adresse": "Ngaoundéré() : Ngaoundere",
             "quartier": "Ngaoundere",
@@ -714,16 +714,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 7.313208781675136,
-              "lng": 13.577214825978118
+              "lat": 7.309130593772452,
+              "lng": 13.579122428668876
             },
-            "note": "5.0",
-            "scraped_at": "2026-01-10T07:11:09.558Z",
+            "note": "3.9",
+            "scraped_at": "2026-01-11T07:13:09.650Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/adamaoua/"
           },
           {
-            "id": "ph_adamaoua_1_1768029069558",
+            "id": "ph_adamaoua_1_1768115589650",
             "nom": "Pharmacie GRAND MARCHÉ NGAOUNDERE",
             "adresse": "Ngaoundéré() : Ngaoundere",
             "quartier": "Ngaoundere",
@@ -738,16 +738,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 7.31610347628795,
-              "lng": 13.573932730793928
+              "lat": 7.3157725840981085,
+              "lng": 13.573839241313792
             },
-            "note": "4.3",
-            "scraped_at": "2026-01-10T07:11:09.558Z",
+            "note": "3.7",
+            "scraped_at": "2026-01-11T07:13:09.650Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/adamaoua/"
           },
           {
-            "id": "ph_adamaoua_3_1768029069558",
+            "id": "ph_adamaoua_3_1768115589650",
             "nom": "Pharmacie DE LA GARE NGAOUNDERE",
             "adresse": "Ngaoundéré() : Ngaoundere",
             "quartier": "Ngaoundere",
@@ -762,16 +762,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 7.31239525970781,
-              "lng": 13.57814209584382
+              "lat": 7.321374899088858,
+              "lng": 13.578821057809575
             },
-            "note": "4.0",
-            "scraped_at": "2026-01-10T07:11:09.558Z",
+            "note": "4.6",
+            "scraped_at": "2026-01-11T07:13:09.650Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/adamaoua/"
           },
           {
-            "id": "ph_adamaoua_4_1768029069558",
+            "id": "ph_adamaoua_4_1768115589650",
             "nom": "Pharmacie DE L’ESPÉRANCE",
             "adresse": "Ngaoundéré() : Ngaoundere",
             "quartier": "Ngaoundere",
@@ -786,16 +786,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 7.324612999644616,
-              "lng": 13.584233833575988
+              "lat": 7.322278440004779,
+              "lng": 13.586009948663738
             },
-            "note": "4.8",
-            "scraped_at": "2026-01-10T07:11:09.558Z",
+            "note": "3.6",
+            "scraped_at": "2026-01-11T07:13:09.650Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/adamaoua/"
           },
           {
-            "id": "ph_adamaoua_5_1768029069558",
+            "id": "ph_adamaoua_5_1768115589651",
             "nom": "Pharmacie DE L’ENTENTE",
             "adresse": "Ngaoundéré() : Ngaoundere",
             "quartier": "Ngaoundere",
@@ -810,16 +810,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 7.317880539085456,
-              "lng": 13.584859772478367
+              "lat": 7.3232445842220795,
+              "lng": 13.576114800675688
             },
-            "note": "3.6",
-            "scraped_at": "2026-01-10T07:11:09.558Z",
+            "note": "4.7",
+            "scraped_at": "2026-01-11T07:13:09.651Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/adamaoua/"
           },
           {
-            "id": "ph_adamaoua_6_1768029069558",
+            "id": "ph_adamaoua_6_1768115589651",
             "nom": "Pharmacie CARREFOUR AOUDI",
             "adresse": "Ngaoundéré() : Ngaoundere",
             "quartier": "Ngaoundere",
@@ -834,16 +834,16 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 7.30757395580731,
-              "lng": 13.591563914510349
+              "lat": 7.308103415339966,
+              "lng": 13.58216651679223
             },
-            "note": "4.5",
-            "scraped_at": "2026-01-10T07:11:09.558Z",
+            "note": "4.4",
+            "scraped_at": "2026-01-11T07:13:09.651Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/adamaoua/"
           },
           {
-            "id": "ph_adamaoua_7_1768029069558",
+            "id": "ph_adamaoua_7_1768115589651",
             "nom": "Pharmacie ADAMA",
             "adresse": "Ngaoundéré() : Ngaoundere",
             "quartier": "Ngaoundere",
@@ -858,11 +858,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 7.325016489952325,
-              "lng": 13.581890903623524
+              "lat": 7.314211834550601,
+              "lng": 13.576384990742781
             },
-            "note": "4.0",
-            "scraped_at": "2026-01-10T07:11:09.558Z",
+            "note": "4.5",
+            "scraped_at": "2026-01-11T07:13:09.651Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/adamaoua/"
           }
@@ -872,7 +872,7 @@
         "ville": "Banyo",
         "pharmacies": [
           {
-            "id": "ph_adamaoua_2_1768029069558",
+            "id": "ph_adamaoua_2_1768115589650",
             "nom": "Pharmacie du MAYO BANYO",
             "adresse": "Banyo : BANYO",
             "quartier": "BANYO",
@@ -887,11 +887,11 @@
               "Conseil pharmaceutique"
             ],
             "coordinates": {
-              "lat": 7.322758560329934,
-              "lng": 13.59248831036378
+              "lat": 7.3259879581752845,
+              "lng": 13.584247028139783
             },
-            "note": "3.9",
-            "scraped_at": "2026-01-10T07:11:09.558Z",
+            "note": "4.3",
+            "scraped_at": "2026-01-11T07:13:09.650Z",
             "source": "DocHelp-CM",
             "source_url": "https://www.dochelp-cm.org/listing-location/adamaoua/"
           }
