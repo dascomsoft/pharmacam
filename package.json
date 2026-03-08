@@ -13,8 +13,10 @@
     "stats": "node -e \"const d=require('./public/data/gardes_du_jour.json'); console.log('Total:', d.total); console.log('Avec tel:', d.pharmacies.filter(p=>p.tel&&p.tel!=='Non listé').length); console.log('Villes:', [...new Set(d.pharmacies.map(p=>p.ville))].length);\""
   },
   "dependencies": {
+    "@libsql/client": "^0.17.0",
     "axios": "^1.13.2",
     "cheerio": "^1.1.2",
+    "drizzle-orm": "^0.45.1",
     "framer-motion": "^11.18.2",
     "lucide-react": "^0.556.0",
     "next": "^15.0.5",
@@ -24,6 +26,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.22",
+    "drizzle-kit": "^0.31.9",
     "eslint": "^9.39.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.18"
