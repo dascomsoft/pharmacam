@@ -1,6 +1,7 @@
 // src/lib/db/schema.js
 import { sql } from 'drizzle-orm';
-import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, real, primaryKey } from 'drizzle-orm/sqlite-core';
+
 
 export const pharmacies = sqliteTable('pharmacies', {
   id: text('id').primaryKey(),
@@ -25,7 +26,7 @@ export const pharmacies = sqliteTable('pharmacies', {
 
 export const gardes = sqliteTable('gardes', {
   id: text('id').primaryKey(),
-  pharmacie_id: text('pharmacie_id').references(() => pharmacies.id),
+  pharmacie_id: text('pharmacie_id').references(() => pharmacies.id, { onDelete: 'cascade' }),
   date_debut: text('date_debut').notNull(),
   date_fin: text('date_fin').notNull(),
   periode_texte: text('periode_texte'),
@@ -35,11 +36,11 @@ export const gardes = sqliteTable('gardes', {
 
 export const stats_pharmacies = sqliteTable('stats_pharmacies', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  pharmacie_id: text('pharmacie_id').references(() => pharmacies.id),
+  pharmacie_id: text('pharmacie_id').references(() => pharmacies.id, { onDelete: 'cascade' }),
   total_gardes: integer('total_gardes').default(0),
-  fiabilite_tel: real('fiabilite_tel').default(0), // % de fois où le tel est présent
+  fiabilite_tel: real('fiabilite_tel').default(0),
   derniere_garde: text('derniere_garde'),
-  popularite: integer('popularite').default(0) // nombre de recherches/clics
+  popularite: integer('popularite').default(0)
 });
 
 export const scraping_logs = sqliteTable('scraping_logs', {
@@ -53,3 +54,17 @@ export const scraping_logs = sqliteTable('scraping_logs', {
   erreur: text('erreur'),
   duree_secondes: integer('duree_secondes')
 });
+
+// Table des services (catalogue)
+export const services = sqliteTable('services', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  nom: text('nom').unique().notNull()
+});
+
+// Table de liaison pharmacies-services
+export const pharmacie_services = sqliteTable('pharmacie_services', {
+  pharmacie_id: text('pharmacie_id').notNull().references(() => pharmacies.id, { onDelete: 'cascade' }),
+  service_id: integer('service_id').notNull().references(() => services.id, { onDelete: 'cascade' })
+}, (table) => ({
+  pk: primaryKey({ columns: [table.pharmacie_id, table.service_id] })
+}));

@@ -304,6 +304,7 @@ console.log('📦 Chargement des modules DB...');
 const { db } = await import('../src/lib/db/index.js');
 const { pharmacies, gardes, scraping_logs } = await import('../src/lib/db/index.js');
 
+
 // Vérifier que les variables sont chargées
 console.log('🔍 Vérification des variables d\'environnement:');
 console.log(`📌 TURSO_DATABASE_URL: ${process.env.TURSO_DATABASE_URL ? '✅ Présent' : '❌ Manquant'}`);
