@@ -531,15 +531,54 @@ jobs:
         with:
           node-version: '20'
           
+      - name: 🔍 Debug - Vérification des fichiers
+        run: |
+          echo "📁 Structure du projet:"
+          pwd
+          ls -la
+          echo ""
+          echo "📁 Vérification de src/lib/db/:"
+          ls -la src/lib/db/ || echo "❌ Dossier manquant"
+          echo ""
+          echo "📄 Contenu de client.js:"
+          cat src/lib/db/client.js || echo "❌ Fichier manquant"
+          echo ""
+          echo "📄 Contenu de schema.js:"
+          cat src/lib/db/schema.js || echo "❌ Fichier manquant"
+          echo ""
+          echo "📁 Vérification de scripts/:"
+          ls -la scripts/
+          echo ""
+          echo "📄 Contenu de scrape-with-db.js (début):"
+          head -20 scripts/scrape-with-db.js
+          
       - name: Install dependencies
         run: npm ci
+        
+      - name: 🔑 Vérification des secrets
+        run: |
+          if [ -z "${{ secrets.TURSO_DATABASE_URL }}" ]; then
+            echo "❌ TURSO_DATABASE_URL manquant"
+            exit 1
+          else
+            echo "✅ TURSO_DATABASE_URL présent"
+          fi
+          
+          if [ -z "${{ secrets.TURSO_AUTH_TOKEN }}" ]; then
+            echo "❌ TURSO_AUTH_TOKEN manquant"
+            exit 1
+          else
+            echo "✅ TURSO_AUTH_TOKEN présent"
+          fi
         
       - name: Run scraper with database
         env:
           TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
           TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
-        run: node scripts/scrape-with-db.js
-        
+        run: |
+          echo "🚀 Lancement du script..."
+          node scripts/scrape-with-db.js
+          
       - name: Generate JSON backup
         env:
           TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
