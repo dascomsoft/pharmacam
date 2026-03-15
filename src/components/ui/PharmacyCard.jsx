@@ -1,6 +1,3 @@
-
-
-
 'use client';
 import { MapPin, Phone, Navigation, Clock, Star, Shield, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -14,6 +11,51 @@ const formatDistance = (distance) => {
   } else {
     return `${(distance / 1000).toFixed(1)}km`;
   }
+};
+
+// Fonction pour afficher les services (tableau ou JSON)
+const renderServices = (services) => {
+  if (!services) return null;
+  
+  let servicesArray = [];
+  
+  // Si c'est déjà un tableau
+  if (Array.isArray(services)) {
+    servicesArray = services;
+  } 
+  // Si c'est une chaîne JSON
+  else if (typeof services === 'string') {
+    try {
+      const parsed = JSON.parse(services);
+      servicesArray = Array.isArray(parsed) ? parsed : [];
+    } catch {
+      // Si ce n'est pas du JSON valide, on ne montre rien
+      return null;
+    }
+  }
+  
+  if (servicesArray.length === 0) return null;
+  
+  return (
+    <div className="pt-3">
+      <p className="text-sm text-gray-500 mb-2">Services :</p>
+      <div className="flex flex-wrap gap-2">
+        {servicesArray.slice(0, 3).map((service, index) => (
+          <span
+            key={index}
+            className="px-3 py-1 bg-gray-800/50 text-gray-400 text-xs rounded-full border border-gray-700"
+          >
+            {service}
+          </span>
+        ))}
+        {servicesArray.length > 3 && (
+          <span className="px-3 py-1 bg-gray-800 text-gray-500 text-xs rounded-full">
+            +{servicesArray.length - 3} autres
+          </span>
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default function PharmacyCard({ pharmacy, distance, isRecommended, isGarde }) {
@@ -127,27 +169,8 @@ export default function PharmacyCard({ pharmacy, distance, isRecommended, isGard
           </div>
         )}
         
-        {/* Services */}
-        {pharmacy.services && pharmacy.services.length > 0 && (
-          <div className="pt-3">
-            <p className="text-sm text-gray-500 mb-2">Services :</p>
-            <div className="flex flex-wrap gap-2">
-              {pharmacy.services.slice(0, 3).map((service, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-gray-800/50 text-gray-400 text-xs rounded-full border border-gray-700"
-                >
-                  {service}
-                </span>
-              ))}
-              {pharmacy.services.length > 3 && (
-                <span className="px-3 py-1 bg-gray-800 text-gray-500 text-xs rounded-full">
-                  +{pharmacy.services.length - 3} autres
-                </span>
-              )}
-            </div>
-          </div>
-        )}
+        {/* Services - CORRIGÉ */}
+        {renderServices(pharmacy.services)}
       </div>
       
       {/* Action Buttons */}
@@ -169,19 +192,7 @@ export default function PharmacyCard({ pharmacy, distance, isRecommended, isGard
           <Phone size={20} />
           <span>Appeler</span>
         </button>
-        
-        {/* <button 
-          onClick={() => {
-            const address = pharmacy.adresse || pharmacy.localisation || '';
-            const city = pharmacy.ville || '';
-            const searchQuery = encodeURIComponent(`${address} ${city}`);
-            window.open(`https://maps.google.com/?q=${searchQuery}`, '_blank');
-          }}
-          className="py-3 rounded-xl font-semibold transition-all duration-300 flex items-center justify-center space-x-2 bg-secondary-light border border-gray-700 text-gray-300 hover:bg-gray-800 hover:border-gray-600"
-        >
-          <Navigation size={20} />
-          <span>Itinéraire</span>
-        </button> */}
+      
       </div>
       
       {/* Footer */}
@@ -210,7 +221,6 @@ export default function PharmacyCard({ pharmacy, distance, isRecommended, isGard
     </motion.div>
   );
 }
-
 
 
 

@@ -532,38 +532,25 @@ jobs:
           node-version: '20'
           cache: 'npm'
           
-      - name: 🔧 Nettoyage du cache
-        run: |
-          rm -rf node_modules
-          npm cache clean --force
-          
-      - name: Install dependencies
+      - name: 📦 Installation
         run: npm ci
         
-      - name: 🔍 Vérification des fichiers
-        run: |
-          echo "📁 Structure:"
-          pwd
-          ls -la src/lib/db/
-          echo ""
-          echo "📄 Contenu de client.js:"
-          cat src/lib/db/client.js | head -10
-          
-      - name: Run scraper with database
+      - name: 🔍 Test d'import
+        run: node scripts/test-import.js
+        
+      - name: 🚀 Scraping
         env:
           TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
           TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
-        run: |
-          # Alternative: exécuter avec l'option --experimental-specifier-resolution=node
-          node --experimental-specifier-resolution=node scripts/scrape-with-db.js
-          
-      - name: Generate JSON backup
+        run: node scripts/scrape-with-db.js
+        
+      - name: 📁 Backup JSON
         env:
           TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
           TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
         run: node scripts/generate-json-backup.js
         
-      - name: Commit changes
+      - name: 📤 Commit
         run: |
           git config user.name "GitHub Action"
           git config user.email "action@github.com"

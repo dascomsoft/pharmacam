@@ -1464,7 +1464,6 @@
 
 
 
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -1474,116 +1473,16 @@ import MicrophoneButton from '../src/components/voice/MicrophoneButton';
 import PharmacyCard from '../src/components/ui/PharmacyCard';
 import { useVoice } from '../src/hooks/useVoice';
 import { useLocation } from '../src/hooks/useLocation';
-import { hybridPharmacySearch, analyzeQuery } from '../src/lib/pharmacies';
 import Image from "next/image";
-
-// IMPORT DIRECT DU FICHIER JSON
-import pharmaciesData from '../src/data/pharmacies.json';
 
 // Icônes Lucide React
 import {
   MapPin, Phone, Clock, Shield,
   Search, AlertCircle,
-  Sparkles, Moon, Sun, Heart,
+  Sparkles, Moon, Sun,
   Building2, ChevronLeft, X,
-  Mic, Volume2
+  Mic
 } from 'lucide-react';
-
-// ==================== INDEXATION DES PHARMACIES ====================
-// Fonctions d'indexation intégrées directement dans le fichier
-let pharmaciesIndex = null;
-let villeList = [];
-
-const initPharmacyIndex = (pharmaciesData) => {
-  const index = {
-    parNom: new Map(),     // "tongolo" → [pharmacie]
-    parVille: new Map(),   // "yaoundé" → [toutes pharmacies de yaoundé]
-    nomsSimplifies: new Map()
-  };
-
-  pharmaciesData.forEach(pharma => {
-    // Index par NOM SIMPLIFIÉ
-    const nomSimple = pharma.nom
-      .toLowerCase()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-      .replace(/pharmacie\s*/gi, '')
-      .replace(/[^a-z0-9\s]/g, ' ')
-      .replace(/\s+/g, ' ')
-      .trim();
-
-    if (!index.parNom.has(nomSimple)) {
-      index.parNom.set(nomSimple, []);
-    }
-    index.parNom.get(nomSimple).push(pharma);
-    index.nomsSimplifies.set(nomSimple, pharma.nom);
-
-    // Index par VILLE
-    if (pharma.ville) {
-      const villeClean = pharma.ville
-        .toLowerCase()
-        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-        .trim();
-      
-      if (!index.parVille.has(villeClean)) {
-        index.parVille.set(villeClean, []);
-        villeList.push(villeClean);
-      }
-      index.parVille.get(villeClean).push(pharma);
-    }
-  });
-
-  pharmaciesIndex = index;
-  console.log(`✅ Index initialisé: ${index.parVille.size} villes, ${index.parNom.size} noms`);
-  return index;
-};
-
-const searchPharmacyByName = (query) => {
-  if (!pharmaciesIndex) return null;
-  
-  const queryClean = query
-    .toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .replace(/pharmacie\s*/gi, '')
-    .replace(/[^a-z0-9\s]/g, ' ')
-    .trim();
-
-  // Recherche exacte
-  if (pharmaciesIndex.parNom.has(queryClean)) {
-    return pharmaciesIndex.parNom.get(queryClean);
-  }
-
-  // Recherche partielle
-  for (const [nom, pharmacies] of pharmaciesIndex.parNom) {
-    if (nom.includes(queryClean) || queryClean.includes(nom)) {
-      return pharmacies;
-    }
-  }
-
-  return null;
-};
-
-const searchPharmacyByCity = (villeQuery) => {
-  if (!pharmaciesIndex) return [];
-  
-  const villeClean = villeQuery
-    .toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .trim();
-
-  // Recherche exacte
-  if (pharmaciesIndex.parVille.has(villeClean)) {
-    return pharmaciesIndex.parVille.get(villeClean);
-  }
-
-  // Recherche approximative (yaounde → yaoundé)
-  for (const [ville, pharmacies] of pharmaciesIndex.parVille) {
-    if (ville.includes(villeClean) || villeClean.includes(ville)) {
-      return pharmacies;
-    }
-  }
-
-  return []; // Ville non trouvée
-};
 
 // ==================== COMPOSANT PRINCIPAL ====================
 export default function Home() {
@@ -1605,7 +1504,6 @@ export default function Home() {
   const [selectedPharmacy, setSelectedPharmacy] = useState(null);
   const [viewMode, setViewMode] = useState('home');
   const [showVoiceHelper, setShowVoiceHelper] = useState(false);
-  const [pharmacyIndex, setPharmacyIndex] = useState(null);
 
   const { isListening, transcript, startListening, error: voiceError } = useVoice();
   const { location, loading: locationLoading } = useLocation();
@@ -1621,356 +1519,127 @@ export default function Home() {
     'Sud': 'from-teal-500 to-teal-700'
   };
 
-  // ==================== FONCTIONS DE RECHERCHE LOCALE ====================
-  const searchLocalPharmacies = (query) => {
-    const lowerQuery = query.toLowerCase().trim();
-    
-    // Nettoyer la requête
-    let cleanQuery = lowerQuery
-      .replace(/^pharmacie\s+de\s+/, '')
-      .replace(/^pharmacie\s+/, '')
-      .trim();
-
-    // Recherche par ville
-    const resultatsVille = searchPharmacyByCity(cleanQuery);
-    if (resultatsVille.length > 0) {
-      return {
-        type: 'ville',
-        results: resultatsVille,
-        message: `Pharmacies à ${cleanQuery.charAt(0).toUpperCase() + cleanQuery.slice(1)}`
-      };
-    }
-
-    // Recherche par nom
-    const resultatsNom = searchPharmacyByName(cleanQuery);
-    if (resultatsNom && resultatsNom.length > 0) {
-      return {
-        type: 'exact',
-        results: resultatsNom,
-        message: `Pharmacie ${resultatsNom[0].nom}`
-      };
-    }
-
-    // Aucun résultat local
-    return {
-      type: 'not_found',
-      results: [],
-      message: `Aucune pharmacie trouvée pour "${query}" localement`
-    };
-  };
-
-  // ==================== FONCTION GÉOLOCALISATION ====================
-  const findNearbyPharmacies = () => {
-    if (!navigator.geolocation) {
-      alert("La géolocalisation n'est pas supportée par votre navigateur");
-      return;
-    }
-
+  // ==================== FONCTIONS DE RECHERCHE VIA API ====================
+  const searchPharmacies = async (query, filters = {}) => {
     setIsLoading(true);
+    try {
+      const params = new URLSearchParams();
+      if (query) params.append('query', query);
+      if (filters.region) params.append('region', filters.region);
+      if (filters.ville) params.append('ville', filters.ville);
+      if (filters.en_garde) params.append('en_garde', 'true');
+      params.append('limit', '100');
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const userLat = position.coords.latitude;
-        const userLng = position.coords.longitude;
-
-        try {
-          const allPharmacies = pharmaciesData;
-
-          const calculateDistance = (lat1, lon1, lat2, lon2) => {
-            const R = 6371e3;
-            const φ1 = lat1 * Math.PI / 180;
-            const φ2 = lat2 * Math.PI / 180;
-            const Δφ = (lat2 - lat1) * Math.PI / 180;
-            const Δλ = (lon2 - lon1) * Math.PI / 180;
-
-            const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-              Math.cos(φ1) * Math.cos(φ2) *
-              Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
-            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-            return R * c;
-          };
-
-          const pharmaciesWithDistance = allPharmacies.map(pharmacy => {
-            if (!pharmacy.lat || !pharmacy.lng) {
-              return { ...pharmacy, distance: Infinity };
-            }
-
-            const distance = calculateDistance(
-              userLat,
-              userLng,
-              parseFloat(pharmacy.lat),
-              parseFloat(pharmacy.lng)
-            );
-
-            return { ...pharmacy, distance };
-          });
-
-          const nearbyPharmacies = pharmaciesWithDistance
-            .filter(p => p.distance < 10000 && p.distance !== Infinity)
-            .sort((a, b) => a.distance - b.distance)
-            .slice(0, 20);
-
-          setSearchResults(nearbyPharmacies.map((ph, i) => ({
-            ...ph,
-            id: `nearby_${i}`,
-            type: 'normal',
-            isGarde: false
-          })));
-
-          setSearchType('nearby');
-          setViewMode('results');
-
-        } catch (error) {
-          console.error('Erreur recherche pharmacies proches:', error);
-          alert("Erreur lors de la recherche des pharmacies proches");
-        } finally {
-          setIsLoading(false);
-        }
-      },
-      (error) => {
-        setIsLoading(false);
-        if (error.code === 1) {
-          alert("Activez la localisation pour trouver les pharmacies proches de vous");
-        } else {
-          alert("Impossible d'obtenir votre position. Vérifiez votre connexion GPS.");
-        }
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
+      const response = await fetch(`/api/pharmacies?${params}`);
+      const data = await response.json();
+      
+      return {
+        success: true,
+        results: data.data || [],
+        total: data.pagination?.total || 0
+      };
+    } catch (error) {
+      console.error('Erreur recherche API:', error);
+      return {
+        success: false,
+        results: [],
+        total: 0,
+        error: error.message
+      };
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // ==================== CHARGEMENT INITIAL ====================
-  useEffect(() => {
-    loadGardesData();
-
-    if (location) {
-      const city = location.lat > 4.0 ? 'Douala' : 'Yaoundé';
-      setUserCity(city);
-    }
-
-    // INITIALISER L'INDEX DES PHARMACIES
-    const index = initPharmacyIndex(pharmaciesData);
-    setPharmacyIndex(index);
-    
-    console.log("🎯 Villes disponibles:", Array.from(index.parVille.keys()).sort());
-  }, [location]);
-
+  // ==================== CHARGEMENT DES GARDES DU JOUR ====================
   const loadGardesData = async () => {
     setLoadingGardes(true);
     try {
-      const response = await fetch('/data/gardes_du_jour_clean.json');
-      if (!response.ok) throw new Error('Fichier non trouvé');
+      const response = await fetch('/api/pharmacies?en_garde=true&limit=500');
       const data = await response.json();
-      setGardesData(data);
+      
+      const pharmacies = data.data || [];
+      
+      // Organiser par région et ville
+      const regionsData = {};
+      
+      pharmacies.forEach(pharma => {
+        const region = pharma.region || 'Autre';
+        const ville = pharma.ville || 'Non spécifié';
+        
+        if (!regionsData[region]) {
+          regionsData[region] = [];
+        }
+        
+        let cityEntry = regionsData[region].find(c => c.ville === ville);
+        if (!cityEntry) {
+          cityEntry = { ville, pharmacies: [] };
+          regionsData[region].push(cityEntry);
+        }
+        
+        cityEntry.pharmacies.push(pharma);
+      });
+      
+      setGardesData({
+        periode: "Aujourd'hui",
+        maj: new Date().toISOString(),
+        regions: regionsData
+      });
+      
     } catch (error) {
       console.error('Erreur chargement gardes:', error);
       setGardesData({
         periode: "Aujourd'hui",
         maj: new Date().toISOString(),
-        regions: {
-          'Centre': [],
-          'Littoral': [],
-          'Ouest': [],
-          'Adamaoua': []
-        }
+        regions: {}
       });
     } finally {
       setLoadingGardes(false);
     }
   };
 
-  // Scroller vers le haut
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  // ==================== RECHERCHE VOCALE AMÉLIORÉE ====================
-  useEffect(() => {
-    if (transcript) {
-      setSearchQuery(transcript);
-      handleVoiceCommand(transcript);
-    }
-  }, [transcript]);
-
-  // Gestion du bouton vocal
-  const handleVoiceButtonClick = () => {
-    setShowVoiceHelper(true);
-    startListening();
-  };
-
-  // NOUVELLE FONCTION handleVoiceCommand AMÉLIORÉE
-  const handleVoiceCommand = (command) => {
-    console.log(`🎤 Commande vocale: "${command}"`);
-    const lowerCommand = command.toLowerCase().trim();
-    
-    // ENLEVER "PHARMACIE DE" AU DÉBUT SI PRÉSENT
-    let query = lowerCommand
-      .replace(/^pharmacie\s+de\s+/, '')  // "pharmacie de mbouda" → "mbouda"
-      .replace(/^pharmacie\s+/, '')       // "pharmacie tongolo" → "tongolo"
-      .trim();
-
-    // 1. ESSAYER COMME VILLE D'ABORD
-    const resultatsVille = searchPharmacyByCity(query);
-    
-    if (resultatsVille.length > 0) {
-      // C'EST UNE VILLE !
-      setSearchResults(resultatsVille);
-      setSearchQuery(`Pharmacies à ${query.charAt(0).toUpperCase() + query.slice(1)}`);
-      setViewMode('results');
-      setSearchType('ville');
-      
-      setTimeout(() => setShowVoiceHelper(false), 800);
-      return;
-    }
-
-    // 2. ESSAYER COMME NOM DE PHARMACIE
-    const resultatsNom = searchPharmacyByName(query);
-    
-    if (resultatsNom && resultatsNom.length > 0) {
-      // C'EST UN NOM DE PHARMACIE !
-      setSearchResults(resultatsNom);
-      setSearchQuery(resultatsNom[0].nom);
-      setViewMode('results');
-      setSearchType('exact');
-      
-      setTimeout(() => setShowVoiceHelper(false), 800);
-      return;
-    }
-
-    // 3. SI ON ARRIVE ICI, C'EST NI UNE VILLE NI UN NOM CONNU
-    // On vérifie si c'est une commande spéciale comme "garde" ou "normale"
-    if (lowerCommand.includes('pharmacie de garde') || lowerCommand.includes('garde')) {
-      handleGardeSearch();
-      setTimeout(() => setShowVoiceHelper(false), 800);
-      return;
-    } else if (lowerCommand.includes('pharmacie normale') || lowerCommand.includes('pharmacie')) {
-      performSearch(command, 'normal');
-      setTimeout(() => setShowVoiceHelper(false), 800);
-      return;
-    }
-
-    // 4. MESSAGE POLI POUR VILLE/NOM INCONNU
-    const villesDisponibles = Array.from(pharmaciesIndex?.parVille.keys() || []).slice(0, 5);
-    const messagePoli = `Je n'ai pas trouvé "${command}". Essayez avec une ville comme ${villesDisponibles.join(', ')}.`;
-    
-    setAiResponse({
-      type: 'info',
-      message: messagePoli,
-      suggestions: villesDisponibles
-    });
-    
-    setSearchResults([]);
-    setViewMode('results');
-    setSearchType('not_found');
-    
-    setTimeout(() => setShowVoiceHelper(false), 1500);
-  };
-
-  // ==================== RECHERCHE TEXTUELLE AMÉLIORÉE ====================
+  // ==================== FONCTION DE RECHERCHE PRINCIPALE ====================
   const performSearch = async (query, type = 'all') => {
-    console.log(`🔍 Recherche textuelle: "${query}"`);
-    const lowerQuery = query.toLowerCase().trim();
+    console.log(`🔍 Recherche: "${query}"`);
     
     setIsLoading(true);
     setAiResponse(null);
     setSearchType(null);
-    setShowRegionSelection(false);
-    setViewMode('results');
 
     try {
-      // 1. D'ABORD ESSAYER LA RECHERCHE LOCALE (INSTANTANÉE)
-      const localSearch = searchLocalPharmacies(lowerQuery);
-
-      if (localSearch.type === 'ville' || localSearch.type === 'exact') {
-        setSearchResults(localSearch.results);
-        setSearchType(localSearch.type);
-        
-        if (localSearch.type === 'ville') {
-          setSearchQuery(`Pharmacies à ${lowerQuery.charAt(0).toUpperCase() + lowerQuery.slice(1)}`);
-        } else {
-          setSearchQuery(localSearch.results[0]?.nom || query);
-        }
-        
+      // 1. Si c'est une recherche de garde
+      if (type === 'garde' || query.toLowerCase().includes('garde')) {
+        const result = await searchPharmacies('', { en_garde: true });
+        setSearchResults(result.results);
+        setSearchType('garde');
+        setViewMode('results');
         setIsLoading(false);
         return;
       }
 
-      // 2. SI C'EST UNE COMMANDE "GARDE"
-      if (lowerQuery.includes('garde')) {
-        handleGardeSearch();
-        setIsLoading(false);
-        return;
-      }
-
-      // 3. SI C'EST "NORMALE" OU "PHARMACIE"
-      if (type === 'normal' || lowerQuery.includes('normale') || lowerQuery.includes('pharmacie')) {
-        const allPharmacies = pharmaciesData;
-        const city = userCity || 'Yaoundé';
-        
-        const cityPharmacies = allPharmacies.filter(pharmacy =>
-          pharmacy.ville === city
-        );
-
-        const results = cityPharmacies.length > 0
-          ? cityPharmacies
-          : allPharmacies.slice(0, 20);
-
-        setSearchResults(results.map((ph, i) => ({
-          ...ph,
-          id: `normal_${city}_${i}`,
-          type: 'normal',
-          isGarde: false,
-          ville: ph.ville
-        })));
-        setSearchType('normal');
-        setIsLoading(false);
-        return;
-      }
-
-      // 4. FALLBACK: UTILISER L'ANCIENNE RECHERCHE HYBRIDE
-      const queryInfo = analyzeQuery(query);
-      const city = queryInfo.ville || userCity || 'Yaoundé';
+      // 2. Recherche normale
+      const result = await searchPharmacies(query);
       
-      const searchResult = await hybridPharmacySearch(query, city, location);
-
-      if (searchResult.type === 'local_database') {
-        setSearchType('local');
-        setSearchResults((searchResult.results || []).map((ph, i) => ({
-          ...ph,
-          id: `hybrid_${i}`,
-          type: ph.isGarde ? 'garde' : 'normal',
-          isGarde: ph.isGarde || false
-        })));
-      } else if (searchResult.type === 'ai_assisted') {
-        setSearchType('ai');
-        setAiResponse(searchResult);
+      if (result.results && result.results.length > 0) {
+        setSearchResults(result.results);
+        setSearchType('normal');
+        setViewMode('results');
+      } else {
+        // Aucun résultat
+        setAiResponse({
+          type: 'not_found',
+          message: `Aucune pharmacie trouvée pour "${query}"`,
+          suggestions: ['Yaoundé', 'Douala', 'Bafoussam']
+        });
         setSearchResults([]);
-      } else if (searchResult.type === 'fallback') {
-        setSearchType('fallback');
-        const lowerQuery = query.toLowerCase();
-        let customMessage = searchResult.message;
-
-        if (lowerQuery.includes('palais') ||
-          lowerQuery.includes('spécifique') ||
-          lowerQuery.includes('nom exact')) {
-          customMessage = "Cette pharmacie spécifique n'est pas dans notre base. Consultez l'annuaire médical officiel.";
-        } else if (searchResult.results && searchResult.results.length === 0) {
-          customMessage = `Aucune pharmacie trouvée pour "${query}". Essayez avec un nom plus simple ou consultez l'annuaire médical.`;
-        }
-
-        searchResult.message = customMessage;
-        setAiResponse(searchResult);
-        setSearchResults([]);
+        setViewMode('results');
       }
 
     } catch (error) {
       console.error('Erreur recherche:', error);
-      setSearchType('error');
       setAiResponse({
         type: 'error',
-        message: "Erreur de recherche. Veuillez réessayer.",
-        suggestions: ['Recharger la page', 'Vérifier votre connexion']
+        message: "Erreur de recherche. Veuillez réessayer."
       });
       setSearchResults([]);
     } finally {
@@ -1978,26 +1647,84 @@ export default function Home() {
     }
   };
 
-  const handleTextSearch = (e) => {
-    if (e.key === 'Enter' && searchQuery.trim()) {
-      const lowerQuery = searchQuery.toLowerCase();
-      
-      // Si c'est une ville ou un nom spécifique, utiliser performSearch améliorée
-      if (lowerQuery.includes('garde')) {
-        handleGardeSearch();
-      } else {
-        // Utiliser la nouvelle performSearch qui cherche d'abord localement
-        performSearch(searchQuery);
-      }
+  // ==================== FONCTION GÉOLOCALISATION ====================
+  const findNearbyPharmacies = () => {
+    if (!navigator.geolocation) {
+      alert("La géolocalisation n'est pas supportée");
+      return;
     }
+
+    setIsLoading(true);
+
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        try {
+          // Pour l'instant, on cherche juste les pharmacies de la région
+          const lat = position.coords.latitude;
+          const lng = position.coords.longitude;
+          
+          // Déterminer la région approximative
+          let region = 'Centre'; // Par défaut
+          if (lat > 5.0) region = 'Adamaoua';
+          if (lat > 8.0) region = 'Nord';
+          
+          const result = await searchPharmacies('', { region });
+          setSearchResults(result.results);
+          setSearchType('nearby');
+          setViewMode('results');
+          
+        } catch (error) {
+          console.error('Erreur:', error);
+          alert("Erreur lors de la recherche");
+        } finally {
+          setIsLoading(false);
+        }
+      },
+      (error) => {
+        setIsLoading(false);
+        if (error.code === 1) {
+          alert("Activez la localisation");
+        } else {
+          alert("Impossible d'obtenir votre position");
+        }
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
+  };
+
+  // ==================== GESTION DE LA RECHERCHE VOCALE ====================
+  useEffect(() => {
+    if (transcript) {
+      setSearchQuery(transcript);
+      handleVoiceCommand(transcript);
+    }
+  }, [transcript]);
+
+  const handleVoiceCommand = (command) => {
+    console.log(`🎤 Commande vocale: "${command}"`);
+    
+    // Détecter si c'est une demande de garde
+    if (command.toLowerCase().includes('garde')) {
+      handleGardeSearch();
+    } else {
+      performSearch(command);
+    }
+    
+    setTimeout(() => setShowVoiceHelper(false), 800);
+  };
+
+  const handleVoiceButtonClick = () => {
+    setShowVoiceHelper(true);
+    startListening();
   };
 
   // ==================== FONCTIONS DES PHARMACIES DE GARDE ====================
-  const handleGardeSearch = () => {
+  const handleGardeSearch = async () => {
     setShowRegionSelection(true);
     setViewMode('region');
     setSearchType('garde');
     setSearchResults([]);
+    await loadGardesData();
   };
 
   const handleRegionSelect = (region) => {
@@ -2015,105 +1742,40 @@ export default function Home() {
     }
   };
 
-  const handleCitySelect = (cityName) => {
-    if (!selectedRegion || !gardesData) return;
-
-    const regionData = gardesData.regions[selectedRegion];
-    const cityData = regionData.find(city => city.ville === cityName);
-    const pharmacies = cityData ? cityData.pharmacies : [];
-
-    setSearchResults(pharmacies.map((ph, i) => ({
-      ...ph,
-      id: `garde_${selectedRegion}_${cityName}_${i}`,
-      type: 'garde',
-      isGarde: true
-    })));
-
-    setViewMode('results');
-    setSearchType('garde_city');
+  const handleCitySelect = async (cityName) => {
+    if (!selectedRegion) return;
+    
+    setIsLoading(true);
+    try {
+      const result = await searchPharmacies('', { 
+        region: selectedRegion,
+        ville: cityName,
+        en_garde: true 
+      });
+      
+      setSearchResults(result.results);
+      setViewMode('results');
+      setSearchType('garde_city');
+    } catch (error) {
+      console.error('Erreur:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handlePharmacySelect = (pharmacy) => {
-    setSelectedPharmacy(pharmacy);
-    showPharmacyDetails(pharmacy);
-  };
-
-  // MODALE PHARMACIE
-  const showPharmacyDetails = (pharmacy) => {
-    const detailsModal = document.createElement('div');
-    detailsModal.className = 'fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80';
-    detailsModal.innerHTML = `
-      <div class="relative w-full max-w-md bg-gray-900 rounded-2xl border border-gray-800 max-h-[90vh] overflow-y-auto">
-        <div class="sticky top-0 bg-gray-900 border-b border-gray-800 p-4 flex justify-between items-center">
-          <h3 class="text-xl font-bold text-white">Détails</h3>
-          <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-white">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-        <div class="p-6">
-          <div class="flex items-start gap-4 mb-6">
-            <div class="w-16 h-16 bg-gradient-to-br ${pharmacy.type === 'garde' ? 'from-green-500 to-green-700' : 'from-blue-500 to-blue-700'} rounded-xl flex items-center justify-center">
-              <Building2 class="text-white" size={32} />
-            </div>
-            <div class="flex-1">
-              <h4 class="text-2xl font-bold text-white mb-2">${pharmacy.nom}</h4>
-              ${pharmacy.type === 'garde' ?
-        '<div class="inline-flex items-center gap-2 px-3 py-1 bg-green-600/20 rounded-full mb-2"><Clock size={16} class="text-green-400" /><span class="text-green-400 font-medium">Pharmacie de garde</span></div>' :
-        '<div class="inline-flex items-center gap-2 px-3 py-1 bg-blue-600/20 rounded-full mb-2"><Building2 size={16} class="text-blue-400" /><span class="text-blue-400 font-medium">Pharmacie normale</span></div>'
+  const handleTextSearch = (e) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
+      const lowerQuery = searchQuery.toLowerCase();
+      
+      if (lowerQuery.includes('garde')) {
+        handleGardeSearch();
+      } else {
+        performSearch(searchQuery);
       }
-            </div>
-          </div>
-
-          <div class="space-y-4">
-            <div>
-              <h5 class="text-sm text-gray-400 mb-2">Adresse</h5>
-              <div class="flex items-start gap-2">
-                <MapPin class="text-green-500 mt-0.5" size={18} />
-                <p class="text-white">${pharmacy.adresse || pharmacy.localisation || 'Non spécifiée'}</p>
-              </div>
-            </div>
-
-            <div>
-              <h5 class="text-sm text-gray-400 mb-2">Téléphone</h5>
-              <div class="flex items-center gap-2">
-                <Phone class="text-green-500" size={18} />
-                <a href="tel:${pharmacy.telephone || ''}" class="text-green-400 hover:text-green-300">${pharmacy.telephone || 'Non disponible'}</a>
-              </div>
-            </div>
-
-            ${pharmacy.horaires ? `
-              <div>
-                <h5 class="text-sm text-gray-400 mb-2">Horaires</h5>
-                <div class="flex items-center gap-2">
-                  <Clock class="text-green-500" size={18} />
-                  <span class="text-white">${pharmacy.horaires}</span>
-                </div>
-              </div>
-            ` : ''}
-          </div>
-
-          <div class="mt-8 pt-6 border-t border-gray-800">
-            <button onclick="window.open('tel:${pharmacy.telephone || ''}', '_self')" 
-                    class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-medium transition flex items-center justify-center gap-2 ${!pharmacy.telephone ? 'opacity-50 cursor-not-allowed' : ''}"
-                    ${!pharmacy.telephone ? 'disabled' : ''}>
-              <Phone size={20} />
-              Appeler
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(detailsModal);
-
-    detailsModal.querySelector('button').onclick = () => detailsModal.remove();
+    }
   };
 
-  const handleOnboardingComplete = () => {
-    setShowOnboarding(false);
-  };
-
+  // ==================== NAVIGATION ====================
   const goBack = () => {
     switch (viewMode) {
       case 'results':
@@ -2146,7 +1808,7 @@ export default function Home() {
         handleGardeSearch();
         break;
       case 'normal':
-        performSearch('pharmacies normales', 'normal');
+        performSearch('', { limit: 50 });
         break;
       case 'near':
         findNearbyPharmacies();
@@ -2155,6 +1817,21 @@ export default function Home() {
         performSearch(action);
     }
   };
+
+  // ==================== CHARGEMENT INITIAL ====================
+  useEffect(() => {
+    loadGardesData();
+
+    if (location) {
+      const city = location.lat > 4.0 ? 'Douala' : 'Yaoundé';
+      setUserCity(city);
+    }
+  }, [location]);
+
+  // Scroller vers le haut
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   // ==================== COMPOSANTS D'AFFICHAGE ====================
   const AIResponseDisplay = ({ response }) => (
@@ -2166,12 +1843,12 @@ export default function Home() {
       <div className="bg-gradient-to-r from-yellow-600/20 to-transparent border border-yellow-600/30 rounded-2xl p-6">
         <div className="flex items-center gap-3 mb-4">
           <AlertCircle className="text-yellow-500" size={24} />
-          <h3 className="text-xl font-bold text-white">Recherche élargie</h3>
+          <h3 className="text-xl font-bold text-white">Information</h3>
         </div>
         <p className="text-gray-200 mb-4">{response.message}</p>
         {response.suggestions && (
           <div className="mt-4">
-            <p className="text-sm text-gray-400 mb-2">Villes disponibles :</p>
+            <p className="text-sm text-gray-400 mb-2">Suggestions :</p>
             <div className="flex flex-wrap gap-2">
               {response.suggestions.map((ville, i) => (
                 <button
@@ -2192,23 +1869,7 @@ export default function Home() {
     </motion.div>
   );
 
-  const FallbackDisplay = ({ response }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="max-w-4xl mx-auto mb-8"
-    >
-      <div className="bg-gradient-to-r from-yellow-600/20 to-transparent border border-yellow-600/30 rounded-2xl p-6">
-        <div className="flex items-center gap-3 mb-4">
-          <AlertCircle className="text-yellow-500" size={24} />
-          <h3 className="text-xl font-bold text-white">Recherche étendue</h3>
-        </div>
-        <p className="text-gray-200">{response.message}</p>
-      </div>
-    </motion.div>
-  );
-
-  // FEEDBACK VOCAL VISUEL
+  // FEEDBACK VOCAL
   const VoiceFeedback = () => (
     <motion.div
       initial={{ opacity: 0, y: -10 }}
@@ -2218,22 +1879,11 @@ export default function Home() {
       <div className="flex items-center gap-2 text-sm bg-gradient-to-r from-green-600/20 to-green-500/10 px-4 py-2 rounded-lg border border-green-500/30">
         <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
         <span className="text-green-300 font-medium">"{transcript}"</span>
-        <div className="ml-auto flex items-center gap-1">
-          {searchType === 'exact' && (
-            <span className="text-xs bg-green-600/30 px-2 py-0.5 rounded">🎯 Exact</span>
-          )}
-          {searchType === 'ville' && (
-            <span className="text-xs bg-blue-600/30 px-2 py-0.5 rounded">🏙️ Ville</span>
-          )}
-          {searchType === 'garde' && (
-            <span className="text-xs bg-red-600/30 px-2 py-0.5 rounded">🛡️ Garde</span>
-          )}
-        </div>
       </div>
     </motion.div>
   );
 
-  // OVERLAY VOCAL COMPACT ET MODERNE
+  // OVERLAY VOCAL
   const VoiceHelper = () => (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -2241,9 +1891,7 @@ export default function Home() {
       exit={{ opacity: 0, y: 20 }}
       className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
     >
-      <div className="bg-gray-900/95 rounded-3xl border border-green-500/30 w-full max-w-md overflow-hidden shadow-2xl">
-        
-        {/* Header minimal */}
+      <div className="bg-gray-900/95 rounded-3xl border border-green-500/30 w-full max-w-md overflow-hidden">
         <div className="p-4 border-b border-gray-800 flex justify-between items-center">
           <h3 className="text-white font-medium">Recherche vocale</h3>
           <button
@@ -2254,35 +1902,20 @@ export default function Home() {
           </button>
         </div>
 
-        {/* Micro énorme et animé - PRIORITÉ VISUELLE */}
         <div className="p-8 flex flex-col items-center">
           <div className="relative mb-6">
-            {/* Animation externe */}
-            <div className="absolute inset-0 -m-8">
-              <div className="absolute inset-0 bg-green-500/10 rounded-full animate-ping"></div>
-              <div className="absolute inset-0 bg-green-500/5 rounded-full animate-pulse"></div>
-            </div>
-            
-            {/* Micro principal */}
-            <div className="relative">
-              <div className="w-48 h-48 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center shadow-2xl">
-                {isListening ? (
-                  <>
-                    {/* Animation d'onde pendant l'écoute */}
-                    <div className="absolute inset-0 border-4 border-white/30 rounded-full animate-ping"></div>
-                    <div className="absolute inset-8 border-4 border-white/20 rounded-full animate-ping" style={{animationDelay: '0.2s'}}></div>
-                    <div className="absolute inset-16 border-4 border-white/10 rounded-full animate-ping" style={{animationDelay: '0.4s'}}></div>
-                    
-                    <Mic className="text-white" size={64} />
-                  </>
-                ) : (
+            <div className="w-48 h-48 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center shadow-2xl">
+              {isListening ? (
+                <>
+                  <div className="absolute inset-0 border-4 border-white/30 rounded-full animate-ping"></div>
                   <Mic className="text-white" size={64} />
-                )}
-              </div>
+                </>
+              ) : (
+                <Mic className="text-white" size={64} />
+              )}
             </div>
           </div>
 
-          {/* Message principal */}
           <div className="text-center mb-8">
             <h2 className="text-3xl font-bold text-white mb-2">
               {isListening ? '🎤 ÉCOUTE...' : 'PARLEZ MAINTENANT'}
@@ -2292,26 +1925,6 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Exemples réduits */}
-          <div className="w-full mb-6">
-            <p className="text-gray-400 text-xs mb-2 text-center">Exemples :</p>
-            <div className="flex flex-col gap-1.5">
-              <div className="flex items-center justify-center gap-2">
-                <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
-                <span className="text-white text-sm">"Yaoundé"</span>
-              </div>
-              <div className="flex items-center justify-center gap-2">
-                <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
-                <span className="text-white text-sm">"Douala"</span>
-              </div>
-              <div className="flex items-center justify-center gap-2">
-                <div className="w-1.5 h-1.5 bg-green-400 rounded-full"></div>
-                <span className="text-white text-sm">"Saint Victor"</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Transcript en bas */}
           {transcript && (
             <div className="w-full bg-gray-800/50 rounded-xl p-4 mb-4">
               <p className="text-gray-400 text-xs mb-1">Vous avez dit :</p>
@@ -2319,23 +1932,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* Indicateur d'écoute */}
-          {isListening && (
-            <div className="flex items-center justify-center gap-1 mb-4">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div
-                  key={i}
-                  className="w-1.5 h-6 bg-green-400 rounded-full animate-pulse"
-                  style={{
-                    animationDelay: `${i * 0.1}s`,
-                    animationDuration: '0.6s'
-                  }}
-                />
-              ))}
-            </div>
-          )}
-
-          {/* Bouton Annuler discret */}
           <button
             onClick={() => setShowVoiceHelper(false)}
             className="mt-4 px-6 py-2 text-gray-400 hover:text-white text-sm transition"
@@ -2348,7 +1944,7 @@ export default function Home() {
   );
 
   if (showOnboarding) {
-    return <OnboardingSteps onComplete={handleOnboardingComplete} />;
+    return <OnboardingSteps onComplete={() => setShowOnboarding(false)} />;
   }
 
   return (
@@ -2402,7 +1998,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Overlay vocal compact */}
+      {/* Overlay vocal */}
       {showVoiceHelper && <VoiceHelper />}
 
       {/* Main Content */}
@@ -2506,22 +2102,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Feedback de recherche */}
-              {isLoading && searchQuery && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="max-w-xl mx-auto mb-2"
-                >
-                  <div className="flex items-center gap-2 text-sm bg-blue-600/20 px-4 py-2 rounded-lg border border-blue-500/30">
-                    <div className="w-4 h-4 border-2 border-blue-400 border-t-transparent rounded-full animate-spin" />
-                    <span className="text-blue-300">
-                      Recherche "{searchQuery.substring(0, 30)}..."
-                    </span>
-                  </div>
-                </motion.div>
-              )}
-
               {/* Feedback vocal */}
               {isListening && transcript && <VoiceFeedback />}
 
@@ -2533,7 +2113,7 @@ export default function Home() {
                     <p className="text-gray-400 text-xs">Service d'urgence</p>
                   </div>
                   <div className="bg-gray-900/50 p-3 rounded-lg border border-gray-800">
-                    <p className="text-lg font-bold text-blue-400">250+</p>
+                    <p className="text-lg font-bold text-blue-400">150+</p>
                     <p className="text-gray-400 text-xs">Pharmacies</p>
                   </div>
                   <div className="bg-gray-900/50 p-3 rounded-lg border border-gray-800">
@@ -2576,13 +2156,9 @@ export default function Home() {
                       const regionData = gardesData.regions[region] || [];
                       let pharmacyCount = 0;
                       
-                      if (regionData.length > 0 && regionData[0].pharmacies) {
-                        pharmacyCount = regionData.reduce((total, city) => {
-                          return total + (city.pharmacies?.length || 0);
-                        }, 0);
-                      } else {
-                        pharmacyCount = regionData.length;
-                      }
+                      regionData.forEach(city => {
+                        pharmacyCount += city.pharmacies?.length || 0;
+                      });
                       
                       const colorClass = REGION_COLORS[region] || 'from-green-500 to-green-700';
 
@@ -2675,9 +2251,7 @@ export default function Home() {
                 </div>
               ) : (
                 <>
-                  {(searchType === 'ai' || searchType === 'fallback' || searchType === 'not_found') && aiResponse && (
-                    <AIResponseDisplay response={aiResponse} />
-                  )}
+                  {aiResponse && <AIResponseDisplay response={aiResponse} />}
 
                   {searchResults.length > 0 ? (
                     <div className="max-w-4xl mx-auto">
@@ -2691,19 +2265,14 @@ export default function Home() {
                               Pharmacies de garde à {selectedRegion}
                             </p>
                           )}
-                          {searchType === 'ville' && (
-                            <p className="text-blue-400 text-sm">
-                              Pharmacies à {searchQuery.replace('Pharmacies à ', '')}
-                            </p>
-                          )}
-                          {searchType === 'exact' && (
+                          {searchType === 'garde' && (
                             <p className="text-green-400 text-sm">
-                              🎯 Correspondance exacte
+                              Toutes les pharmacies de garde
                             </p>
                           )}
                           {searchType === 'normal' && (
                             <p className="text-blue-400 text-sm">
-                              Pharmacies normales
+                              Pharmacies disponibles
                             </p>
                           )}
                           {searchType === 'nearby' && (
@@ -2737,19 +2306,18 @@ export default function Home() {
 
                       <div className="grid grid-cols-1 gap-3 pb-20">
                         {searchResults.map((pharmacy, index) => (
-                          <div key={pharmacy.id || index} onClick={() => handlePharmacySelect(pharmacy)}>
+                          <div key={pharmacy.id || index}>
                             <PharmacyCard
                               pharmacy={pharmacy}
                               distance={pharmacy.distance}
                               isRecommended={false}
-                              isGarde={pharmacy.type === 'garde'}
-                              showItinerary={false}
+                              isGarde={pharmacy.en_garde || searchType === 'garde' || searchType === 'garde_city'}
                             />
                           </div>
                         ))}
                       </div>
                     </div>
-                  ) : (!aiResponse && searchType !== 'garde') ? (
+                  ) : (!aiResponse) ? (
                     <div className="text-center py-8">
                       <AlertCircle size={48} className="text-gray-500 mx-auto mb-3" />
                       <p className="text-lg text-gray-300">Aucun résultat trouvé</p>
@@ -2797,12 +2365,11 @@ export default function Home() {
               <span className="text-xs">Pharmacie Normales</span>
             </button>
 
-            {/* Bouton vocal avec effet girofare rouge */}
+            {/* Bouton vocal */}
             <button
               onClick={handleVoiceButtonClick}
               className="relative flex flex-col items-center gap-0.5 p-1.5 text-white hover:text-white transition active:scale-95"
             >
-              {/* Animation de girofare rouge */}
               {isListening ? (
                 <>
                   <div className="absolute -inset-1 bg-red-500/30 rounded-full animate-ping"></div>
