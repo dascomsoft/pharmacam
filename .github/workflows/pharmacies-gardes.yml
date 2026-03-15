@@ -530,54 +530,32 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
           
-      - name: 🔍 Debug - Vérification des fichiers
+      - name: 🔧 Nettoyage du cache
         run: |
-          echo "📁 Structure du projet:"
-          pwd
-          ls -la
-          echo ""
-          echo "📁 Vérification de src/lib/db/:"
-          ls -la src/lib/db/ || echo "❌ Dossier manquant"
-          echo ""
-          echo "📄 Contenu de client.js:"
-          cat src/lib/db/client.js || echo "❌ Fichier manquant"
-          echo ""
-          echo "📄 Contenu de schema.js:"
-          cat src/lib/db/schema.js || echo "❌ Fichier manquant"
-          echo ""
-          echo "📁 Vérification de scripts/:"
-          ls -la scripts/
-          echo ""
-          echo "📄 Contenu de scrape-with-db.js (début):"
-          head -20 scripts/scrape-with-db.js
+          rm -rf node_modules
+          npm cache clean --force
           
       - name: Install dependencies
         run: npm ci
         
-      - name: 🔑 Vérification des secrets
+      - name: 🔍 Vérification des fichiers
         run: |
-          if [ -z "${{ secrets.TURSO_DATABASE_URL }}" ]; then
-            echo "❌ TURSO_DATABASE_URL manquant"
-            exit 1
-          else
-            echo "✅ TURSO_DATABASE_URL présent"
-          fi
+          echo "📁 Structure:"
+          pwd
+          ls -la src/lib/db/
+          echo ""
+          echo "📄 Contenu de client.js:"
+          cat src/lib/db/client.js | head -10
           
-          if [ -z "${{ secrets.TURSO_AUTH_TOKEN }}" ]; then
-            echo "❌ TURSO_AUTH_TOKEN manquant"
-            exit 1
-          else
-            echo "✅ TURSO_AUTH_TOKEN présent"
-          fi
-        
       - name: Run scraper with database
         env:
           TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
           TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
         run: |
-          echo "🚀 Lancement du script..."
-          node scripts/scrape-with-db.js
+          # Alternative: exécuter avec l'option --experimental-specifier-resolution=node
+          node --experimental-specifier-resolution=node scripts/scrape-with-db.js
           
       - name: Generate JSON backup
         env:
@@ -591,5 +569,5 @@ jobs:
           git config user.email "action@github.com"
           git add public/data/gardes_du_jour.json
           git add public/data/backups/
-          git commit -m "📦 Mise à jour quotidienne" || exit 0
+          git diff --staged --quiet || git commit -m "📦 Mise à jour quotidienne"
           git push
