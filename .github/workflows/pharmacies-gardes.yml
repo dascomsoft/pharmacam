@@ -504,57 +504,57 @@
 
 
 
-
-
-
-
-
-
-
-
-
 name: 🏥 Mise à jour quotidienne
 
 on:
   schedule:
-    - cron: '0 7 * * *'
-  workflow_dispatch:
+    - cron: '0 7 * * *'  # 7h UTC (8h Cameroun)
+  workflow_dispatch:      # Permet le déclenchement manuel
 
 jobs:
   scrape-and-update:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    permissions:
+      contents: write     # ✅ IMPORTANT: Permet à GitHub Actions de push
       
-      - name: Setup Node.js
+    steps:
+      - name: 🔄 Vérification du code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: 🟢 Configuration Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
           
-      - name: 📦 Installation
+      - name: 📦 Installation des dépendances
         run: npm ci
         
-      - name: 🔍 Test d'import
-        run: node scripts/test-import.js
-        
-      - name: 🚀 Scraping
+      - name: 🚀 Exécution du scraping
         env:
           TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
           TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
         run: node scripts/scrape-with-db.js
         
-      - name: 📁 Backup JSON
+      - name: 📁 Génération du backup JSON
         env:
           TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
           TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
         run: node scripts/generate-json-backup.js
         
-      - name: 📤 Commit
+      - name: 📤 Commit des changements
         run: |
-          git config user.name "GitHub Action"
-          git config user.email "action@github.com"
+          git config --global user.name "GitHub Action"
+          git config --global user.email "action@github.com"
           git add public/data/gardes_du_jour.json
-          git add public/data/backups/
-          git diff --staged --quiet || git commit -m "📦 Mise à jour quotidienne"
-          git push
+          git add public/data/backups/ || true
+          if ! git diff --staged --quiet; then
+            git commit -m "📦 Mise à jour quotidienne $(date +'%Y-%m-%d')"
+            git push
+            echo "✅ Changements pushés avec succès"
+          else
+            echo "ℹ️ Aucun changement à commiter"
+          fi
