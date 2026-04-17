@@ -454,67 +454,101 @@
 
 
 
-
 // scripts/scrape-gardes-annuaire-medical.js
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
-// Fonction pour extraire la ville depuis le texte ou l'URL
-function detectCity(text, url, regionName) {
-  // 1. Essayer depuis l'URL
-  if (url) {
-    const urlMatch = url.match(/pharmacies-de-garde-([a-z-]+)/);
-    if (urlMatch) {
-      let city = urlMatch[1].replace(/-/g, ' ');
-      city = city.charAt(0).toUpperCase() + city.slice(1);
-      if (city.length > 2 && city !== 'De' && city !== 'Du') return city;
+// Liste complète des régions et villes (basée sur ta recherche)
+const REGIONS_VILLES = {
+  'adamaoua': ['banyo', 'ngaoundere'],
+  'centre': ['bafia', 'mbalmayo', 'mbandjock', 'mbankomo', 'obala', 'sa-a', 'yaounde'],
+  'est': ['abong-mbang', 'batouri', 'bertoua', 'garoua-boulai'],
+  'extreme-nord': ['kousseri', 'maga', 'maroua', 'yagoua'],
+  'littoral': ['douala', 'edea', 'loum', 'mbanga', 'melong', 'nkongsamba'],
+  'nord': ['figuil', 'garoua', 'guider', 'touboro'],
+  'nord-ouest': ['bamenda', 'mbengwy'],
+  'ouest': ['bafang', 'bafoussam', 'bagangte', 'dschang', 'foumban', 'foumbot', 'mbouda'],
+  'sud': [], // À compléter si trouvé
+  'sud-ouest': ['buea', 'kumba', 'likomba', 'limbe', 'mutengene', 'muyuka']
+};
+
+// Noms des régions en français
+const REGION_NAMES = {
+  'adamaoua': 'Adamaoua',
+  'centre': 'Centre',
+  'est': 'Est',
+  'extreme-nord': 'Extrême-Nord',
+  'littoral': 'Littoral',
+  'nord': 'Nord',
+  'nord-ouest': 'Nord-Ouest',
+  'ouest': 'Ouest',
+  'sud': 'Sud',
+  'sud-ouest': 'Sud-Ouest'
+};
+
+function cleanPharmacyName(nom) {
+  if (!nom) return null;
+  // Enlever les caractères indésirables
+  let clean = nom.replace(/@media|sppb|css|javascript/gi, '');
+  clean = clean.replace(/\d{2,3}[\s-]?\d{2,3}[\s-]?\d{2,3}[\s-]?\d{2,3}/g, '');
+  clean = clean.replace(/Yaoundé|Douala|Bafoussam|:|\|/gi, '');
+  clean = clean.replace(/\s+/g, ' ').trim();
+  if (clean.length < 5) return null;
+  return clean.substring(0, 80);
+}
+
+function extractPhone(text) {
+  const patterns = [
+    /(6[5-9]\d{1}[\s-]?\d{2}[\s-]?\d{2}[\s-]?\d{2})/,
+    /(2[2-3]\d{1}[\s-]?\d{2}[\s-]?\d{2}[\s-]?\d{2})/,
+    /(9[7-8]\d{1}[\s-]?\d{2}[\s-]?\d{2}[\s-]?\d{2})/
+  ];
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match) {
+      return match[0].replace(/\D/g, '').replace(/(\d{3})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4');
     }
   }
-  
-  // 2. Essayer depuis le texte
-  const villes = {
-    'Bafia': /Bafia/i, 'Obala': /Obala/i, 'Mbalmayo': /Mbalmayo/i,
-    'Mbandjock': /Mbandjock/i, 'Mbankomo': /Mbankomo/i, 'Sa\'a': /Sa\'a|Saa/i,
-    'Edea': /Edea|Edéa/i, 'Loum': /Loum/i, 'Mbanga': /Mbanga/i,
-    'Melong': /Melong/i, 'Nkongsamba': /Nkongsamba/i, 'Bafang': /Bafang/i,
-    'Bangangte': /Bangangte/i, 'Bafoussam': /Bafoussam/i, 'Dschang': /Dschang/i,
-    'Foumban': /Foumban/i, 'Mbouda': /Mbouda/i, 'Bamenda': /Bamenda/i,
-    'Buea': /Buea/i, 'Kumba': /Kumba/i, 'Limbe': /Limbe/i, 'Tiko': /Tiko/i,
-    'Ngaoundéré': /Ngaoundéré|Ngaoundere/i, 'Banyo': /Banyo/i, 'Bertoua': /Bertoua/i,
-    'Batouri': /Batouri/i, 'Maroua': /Maroua/i, 'Kousseri': /Kousseri/i,
-    'Garoua': /Garoua/i, 'Guider': /Guider/i, 'Ebolowa': /Ebolowa/i,
-    'Kribi': /Kribi/i, 'Sangmelima': /Sangmelima/i
+  return 'Non listé';
+}
+
+function getCoordinates(ville) {
+  const coords = {
+    'yaounde': { lat: 3.8480, lng: 11.5021 },
+    'douala': { lat: 4.0511, lng: 9.7679 },
+    'bafoussam': { lat: 5.4778, lng: 10.4176 },
+    'bamenda': { lat: 5.9630, lng: 10.1591 },
+    'buea': { lat: 4.1550, lng: 9.2430 },
+    'ngaoundere': { lat: 7.3169, lng: 13.5833 },
+    'garoua': { lat: 9.3077, lng: 13.3988 },
+    'maroua': { lat: 10.5953, lng: 14.3247 },
+    'bertoua': { lat: 4.5792, lng: 13.6769 },
+    'ebolowa': { lat: 2.9000, lng: 11.1500 },
+    'bafia': { lat: 4.6333, lng: 11.2333 },
+    'obala': { lat: 4.1667, lng: 11.5333 },
+    'mbalmayo': { lat: 3.5167, lng: 11.5167 },
+    'edea': { lat: 3.8000, lng: 10.1333 },
+    'nkongsamba': { lat: 4.9500, lng: 9.9333 },
+    'dschang': { lat: 5.4500, lng: 10.0667 },
+    'foumban': { lat: 5.7167, lng: 10.9167 },
+    'kumba': { lat: 4.6333, lng: 9.4500 },
+    'limbe': { lat: 4.0167, lng: 9.2167 }
   };
-  
-  for (const [city, pattern] of Object.entries(villes)) {
-    if (pattern.test(text)) return city;
-  }
-  
-  // 3. Ville par défaut selon la région
-  const defaultVilles = {
-    'Centre': 'Yaoundé', 'Littoral': 'Douala', 'Ouest': 'Bafoussam',
-    'Nord-Ouest': 'Bamenda', 'Sud-Ouest': 'Buea', 'Adamaoua': 'Ngaoundéré',
-    'Est': 'Bertoua', 'Extrême-Nord': 'Maroua', 'Nord': 'Garoua', 'Sud': 'Ebolowa'
-  };
-  return defaultVilles[regionName] || regionName;
+  const base = coords[ville.toLowerCase()] || { lat: 5.0, lng: 12.0 };
+  return { lat: base.lat + (Math.random() * 0.02 - 0.01), lng: base.lng + (Math.random() * 0.02 - 0.01) };
 }
 
 export async function scrapeAnnuaireMedical() {
-  console.log('📡 Scraping Annuaire Médical...');
+  console.log('📡 Scraping Annuaire Médical (TOUTES les villes)...');
   const pharmacies = [];
-  const regions = {
-    'Centre': 'centre', 'Littoral': 'littoral', 'Ouest': 'ouest',
-    'Nord-Ouest': 'nord-ouest', 'Sud-Ouest': 'sud-ouest', 'Adamaoua': 'adamaoua',
-    'Est': 'est', 'Extrême-Nord': 'extreme-nord', 'Nord': 'nord', 'Sud': 'sud'
-  };
   
-  for (const [regionName, regionSlug] of Object.entries(regions)) {
-    const urls = [
-      `https://www.annuaire-medical.cm/fr/pharmacies-de-garde/${regionSlug}`,
-      `https://www.annuaire-medical.cm/fr/pharmacies-de-garde/${regionSlug}/pharmacies-de-garde-${regionSlug === 'centre' ? 'yaounde' : regionSlug === 'littoral' ? 'douala' : regionSlug === 'ouest' ? 'bafoussam' : ''}`
-    ];
+  for (const [regionSlug, villes] of Object.entries(REGIONS_VILLES)) {
+    const regionName = REGION_NAMES[regionSlug] || regionSlug;
     
-    for (const url of urls) {
+    for (const villeSlug of villes) {
+      const url = `https://www.annuaire-medical.cm/fr/pharmacies-de-garde/${regionSlug}/${villeSlug}`;
+      console.log(`  📍 ${regionName} - ${villeSlug}: ${url}`);
+      
       try {
         const { data } = await axios.get(url, {
           timeout: 15000,
@@ -522,6 +556,8 @@ export async function scrapeAnnuaireMedical() {
         });
         
         const $ = cheerio.load(data);
+        let compteur = 0;
+        
         $('.views-row, .pharmacy-item, .listing-item, .node-pharmacy').each((i, el) => {
           const text = $(el).text().trim();
           if (!text.toLowerCase().includes('pharmacie')) return;
@@ -529,49 +565,41 @@ export async function scrapeAnnuaireMedical() {
           let nom = $(el).find('h3, h2, .title, a').first().text().trim();
           if (!nom || nom.length < 3) nom = text.split('\n')[0].trim();
           
-          const telMatch = text.match(/(6|2|9)\d{1}[\s-]?\d{2}[\s-]?\d{2}[\s-]?\d{2}/);
-          const tel = telMatch ? telMatch[0].replace(/\D/g, '').replace(/(\d{3})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4') : 'Non listé';
+          const nomPropre = cleanPharmacyName(nom);
+          if (!nomPropre) return;
+          
+          const tel = extractPhone(text);
+          const villeNom = villeSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
           
           pharmacies.push({
-            id: `ph_annuaire_${regionSlug}_${i}_${Date.now()}`,
-            nom: nom.substring(0, 80),
-            adresse: text.substring(0, 100),
+            id: `ph_annuaire_${regionSlug}_${villeSlug}_${i}_${Date.now()}`,
+            nom: nomPropre,
+            adresse: text.substring(0, 150),
             quartier: 'Non précisé',
-            ville: detectCity(text, url, regionName),
+            ville: villeNom,
             region: regionName,
             tel: tel,
             en_garde: true,
             horaires: '20h00 - 08h00',
             services: ['Urgences', 'Médicaments', 'Conseil pharmaceutique'],
             note: (3.5 + Math.random() * 1.5).toFixed(1),
-            coordinates: getApproxCoordinates(detectCity(text, url, regionName)),
+            coordinates: getCoordinates(villeSlug),
             source: 'Annuaire-Médical',
             source_url: url,
             scraped_at: new Date().toISOString()
           });
+          compteur++;
         });
+        
+        console.log(`     ✅ ${compteur} pharmacies trouvées`);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
       } catch (error) {
-        console.log(`⚠️ Erreur ${regionName}: ${error.message}`);
+        console.log(`     ❌ Erreur: ${error.message}`);
       }
     }
   }
+  
+  console.log(`\n✅ TOTAL Annuaire: ${pharmacies.length} pharmacies`);
   return { pharmacies, periode: `Garde du ${new Date().toLocaleDateString('fr-FR')}` };
-}
-
-function getApproxCoordinates(ville) {
-  const coords = {
-    'Yaoundé': { lat: 3.8480, lng: 11.5021 }, 'Douala': { lat: 4.0511, lng: 9.7679 },
-    'Bafoussam': { lat: 5.4778, lng: 10.4176 }, 'Bamenda': { lat: 5.9630, lng: 10.1591 },
-    'Buea': { lat: 4.1550, lng: 9.2430 }, 'Ngaoundéré': { lat: 7.3169, lng: 13.5833 },
-    'Garoua': { lat: 9.3077, lng: 13.3988 }, 'Maroua': { lat: 10.5953, lng: 14.3247 },
-    'Bertoua': { lat: 4.5792, lng: 13.6769 }, 'Ebolowa': { lat: 2.9000, lng: 11.1500 },
-    'Bafia': { lat: 4.6333, lng: 11.2333 }, 'Obala': { lat: 4.1667, lng: 11.5333 },
-    'Mbalmayo': { lat: 3.5167, lng: 11.5167 }, 'Edea': { lat: 3.8000, lng: 10.1333 },
-    'Loum': { lat: 4.7167, lng: 9.7333 }, 'Nkongsamba': { lat: 4.9500, lng: 9.9333 },
-    'Bangangte': { lat: 5.1333, lng: 10.5167 }, 'Dschang': { lat: 5.4500, lng: 10.0667 },
-    'Foumban': { lat: 5.7167, lng: 10.9167 }, 'Kumba': { lat: 4.6333, lng: 9.4500 },
-    'Limbe': { lat: 4.0167, lng: 9.2167 }, 'Tiko': { lat: 4.0833, lng: 9.3667 }
-  };
-  const base = coords[ville] || { lat: 5.0, lng: 12.0 };
-  return { lat: base.lat + (Math.random() * 0.02 - 0.01), lng: base.lng + (Math.random() * 0.02 - 0.01) };
 }
