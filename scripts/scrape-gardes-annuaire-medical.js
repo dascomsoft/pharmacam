@@ -448,17 +448,16 @@
 
 
 
-
-
-
-
-
-
 // scripts/scrape-gardes-annuaire-medical.js
 import axios from 'axios';
 import * as cheerio from 'cheerio';
+import crypto from 'crypto';
+import fs from 'fs';
 
-// Liste complète des régions et villes (basée sur ta recherche)
+// ============================================
+// CONFIGURATION
+// ============================================
+
 const REGIONS_VILLES = {
   'adamaoua': ['banyo', 'ngaoundere'],
   'centre': ['bafia', 'mbalmayo', 'mbandjock', 'mbankomo', 'obala', 'sa-a', 'yaounde'],
@@ -468,11 +467,10 @@ const REGIONS_VILLES = {
   'nord': ['figuil', 'garoua', 'guider', 'touboro'],
   'nord-ouest': ['bamenda', 'mbengwy'],
   'ouest': ['bafang', 'bafoussam', 'bagangte', 'dschang', 'foumban', 'foumbot', 'mbouda'],
-  'sud': [], // À compléter si trouvé
+  'sud': ['ebolowa', 'kribi', 'sangmelima'],
   'sud-ouest': ['buea', 'kumba', 'likomba', 'limbe', 'mutengene', 'muyuka']
 };
 
-// Noms des régions en français
 const REGION_NAMES = {
   'adamaoua': 'Adamaoua',
   'centre': 'Centre',
@@ -486,33 +484,41 @@ const REGION_NAMES = {
   'sud-ouest': 'Sud-Ouest'
 };
 
-function cleanPharmacyName(nom) {
-  if (!nom) return null;
-  // Enlever les caractères indésirables
-  let clean = nom.replace(/@media|sppb|css|javascript/gi, '');
-  clean = clean.replace(/\d{2,3}[\s-]?\d{2,3}[\s-]?\d{2,3}[\s-]?\d{2,3}/g, '');
-  clean = clean.replace(/Yaoundé|Douala|Bafoussam|:|\|/gi, '');
-  clean = clean.replace(/\s+/g, ' ').trim();
-  if (clean.length < 5) return null;
-  return clean.substring(0, 80);
+// ============================================
+// ID GÉNÉRATION (stable, résistant collisions)
+// ============================================
+
+function generateId(nom, villeSlug, adresse = '') {
+  return crypto
+    .createHash('md5')
+    .update(`${nom}|${villeSlug}|${adresse}`.toLowerCase().trim())
+    .digest('hex');
 }
 
-function extractPhone(text) {
-  const patterns = [
-    /(6[5-9]\d{1}[\s-]?\d{2}[\s-]?\d{2}[\s-]?\d{2})/,
-    /(2[2-3]\d{1}[\s-]?\d{2}[\s-]?\d{2}[\s-]?\d{2})/,
-    /(9[7-8]\d{1}[\s-]?\d{2}[\s-]?\d{2}[\s-]?\d{2})/
-  ];
-  for (const pattern of patterns) {
-    const match = text.match(pattern);
-    if (match) {
-      return match[0].replace(/\D/g, '').replace(/(\d{3})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4');
-    }
+// ============================================
+// FORMATAGE TÉLÉPHONE (100% Cameroun)
+// ============================================
+
+function formatPhone(phone) {
+  const digits = phone.replace(/\D/g, '');
+
+  if (digits.length === 9) {
+    return digits.replace(/(\d{3})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4');
   }
-  return 'Non listé';
+
+  if (digits.length === 12 && digits.startsWith('237')) {
+    const local = digits.slice(3);
+    return local.replace(/(\d{3})(\d{2})(\d{2})(\d{2})/, '$1 $2 $3 $4');
+  }
+
+  return phone;
 }
 
-function getCoordinates(ville) {
+// ============================================
+// COORDONNÉES
+// ============================================
+
+function getCoordinates(villeSlug) {
   const coords = {
     'yaounde': { lat: 3.8480, lng: 11.5021 },
     'douala': { lat: 4.0511, lng: 9.7679 },
@@ -527,79 +533,191 @@ function getCoordinates(ville) {
     'bafia': { lat: 4.6333, lng: 11.2333 },
     'obala': { lat: 4.1667, lng: 11.5333 },
     'mbalmayo': { lat: 3.5167, lng: 11.5167 },
+    'mbandjock': { lat: 4.4500, lng: 11.9000 },
+    'mbankomo': { lat: 3.7833, lng: 11.3833 },
+    'sa-a': { lat: 4.1667, lng: 11.5333 },
     'edea': { lat: 3.8000, lng: 10.1333 },
+    'loum': { lat: 4.7167, lng: 9.7333 },
+    'mbanga': { lat: 4.5000, lng: 9.5667 },
+    'melong': { lat: 5.1167, lng: 9.9500 },
     'nkongsamba': { lat: 4.9500, lng: 9.9333 },
+    'figuil': { lat: 9.7667, lng: 13.9500 },
+    'guider': { lat: 9.9333, lng: 13.9500 },
+    'touboro': { lat: 7.7667, lng: 15.3667 },
+    'kousseri': { lat: 12.0833, lng: 15.0333 },
+    'maga': { lat: 10.5167, lng: 14.9333 },
+    'yagoua': { lat: 10.3333, lng: 15.2333 },
+    'abong-mbang': { lat: 3.9833, lng: 13.1667 },
+    'batouri': { lat: 4.4333, lng: 14.3667 },
+    'garoua-boulai': { lat: 5.8833, lng: 14.5500 },
+    'bafang': { lat: 5.1667, lng: 10.1833 },
+    'bagangte': { lat: 5.1333, lng: 10.5167 },
     'dschang': { lat: 5.4500, lng: 10.0667 },
     'foumban': { lat: 5.7167, lng: 10.9167 },
+    'foumbot': { lat: 5.5167, lng: 10.6333 },
+    'mbouda': { lat: 5.6333, lng: 10.2500 },
+    'kribi': { lat: 2.9333, lng: 9.9167 },
+    'sangmelima': { lat: 2.9333, lng: 11.9833 },
     'kumba': { lat: 4.6333, lng: 9.4500 },
-    'limbe': { lat: 4.0167, lng: 9.2167 }
+    'likomba': { lat: 4.0833, lng: 9.2500 },
+    'limbe': { lat: 4.0167, lng: 9.2167 },
+    'mutengene': { lat: 4.0833, lng: 9.3167 },
+    'muyuka': { lat: 4.2833, lng: 9.4000 },
+    'mbengwy': { lat: 6.0167, lng: 10.2500 }
   };
-  const base = coords[ville.toLowerCase()] || { lat: 5.0, lng: 12.0 };
-  return { lat: base.lat + (Math.random() * 0.02 - 0.01), lng: base.lng + (Math.random() * 0.02 - 0.01) };
+  return coords[villeSlug] || { lat: 5.0, lng: 12.0 };
 }
 
-export async function scrapeAnnuaireMedical() {
-  console.log('📡 Scraping Annuaire Médical (TOUTES les villes)...');
+// ============================================
+// EXTRACTION
+// ============================================
+
+function extractPharmacies(html, regionSlug, regionName, villeSlug, url) {
+  const $ = cheerio.load(html);
   const pharmacies = [];
-  
-  for (const [regionSlug, villes] of Object.entries(REGIONS_VILLES)) {
-    const regionName = REGION_NAMES[regionSlug] || regionSlug;
+
+  const villeNom = villeSlug
+    .replace(/-/g, ' ')
+    .replace(/\b\w/g, l => l.toUpperCase());
+
+  const bodyText = $('body').text();
+
+  const periodeMatch = bodyText.match(/Pharmacies de garde du .*? au .*? 8h00/i);
+  const periode = periodeMatch
+    ? periodeMatch[0]
+    : 'Garde 24h (8h00 - 8h00)';
+
+  const lines = bodyText
+    .split(/\n|\r\n|\r/)
+    .map(l => l.trim())
+    .filter(l => l.length > 8);
+
+  let current = null;
+
+  for (const line of lines) {
+    // ✅ Détection pharmacie plus fiable (début de ligne)
+    const isPharmacy =
+      /^(pharmacie|phcie)\b/i.test(line) &&
+      !/pharmacies de garde/i.test(line) &&
+      line.length < 130;
     
-    for (const villeSlug of villes) {
-      const url = `https://www.annuaire-medical.cm/fr/pharmacies-de-garde/${regionSlug}/${villeSlug}`;
-      console.log(`  📍 ${regionName} - ${villeSlug}: ${url}`);
-      
-      try {
-        const { data } = await axios.get(url, {
-          timeout: 15000,
-          headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36' }
-        });
-        
-        const $ = cheerio.load(data);
-        let compteur = 0;
-        
-        $('.views-row, .pharmacy-item, .listing-item, .node-pharmacy').each((i, el) => {
-          const text = $(el).text().trim();
-          if (!text.toLowerCase().includes('pharmacie')) return;
-          
-          let nom = $(el).find('h3, h2, .title, a').first().text().trim();
-          if (!nom || nom.length < 3) nom = text.split('\n')[0].trim();
-          
-          const nomPropre = cleanPharmacyName(nom);
-          if (!nomPropre) return;
-          
-          const tel = extractPhone(text);
-          const villeNom = villeSlug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-          
-          pharmacies.push({
-            id: `ph_annuaire_${regionSlug}_${villeSlug}_${i}_${Date.now()}`,
-            nom: nomPropre,
-            adresse: text.substring(0, 150),
-            quartier: 'Non précisé',
-            ville: villeNom,
-            region: regionName,
-            tel: tel,
-            en_garde: true,
-            horaires: '20h00 - 08h00',
-            services: ['Urgences', 'Médicaments', 'Conseil pharmaceutique'],
-            note: (3.5 + Math.random() * 1.5).toFixed(1),
-            coordinates: getCoordinates(villeSlug),
-            source: 'Annuaire-Médical',
-            source_url: url,
-            scraped_at: new Date().toISOString()
-          });
-          compteur++;
-        });
-        
-        console.log(`     ✅ ${compteur} pharmacies trouvées`);
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-      } catch (error) {
-        console.log(`     ❌ Erreur: ${error.message}`);
+    if (isPharmacy) {
+      if (current && current.nom) pharmacies.push(current);
+
+      current = {
+        nom: line.replace(/^PHARMACIE\s+/i, 'PHARMACIE ').replace(/\s+/g, ' ').trim(),
+        tel: [],
+        adresse: ''
+      };
+      continue;
+    }
+
+    if (!current) continue;
+
+    // ✅ Téléphones avec formatage correct
+    const phones = line.match(/(\+237)?\s?[2369]\d{2}[\s.-]?\d{2}[\s.-]?\d{2}[\s.-]?\d{2}/g);
+    if (phones) {
+      current.tel.push(...phones.map(formatPhone));
+    }
+
+    // ✅ Adresse avec limite de taille
+    if (
+      line.includes(villeNom) ||
+      /face|quartier|montée|carrefour|boulevard|route|mobil|oil|lybia|immeuble|derrière|entrée/i.test(line)
+    ) {
+      if (current.adresse.length < 120) {
+        current.adresse += ' ' + line.trim();
       }
     }
   }
-  
-  console.log(`\n✅ TOTAL Annuaire: ${pharmacies.length} pharmacies`);
-  return { pharmacies, periode: `Garde du ${new Date().toLocaleDateString('fr-FR')}` };
+
+  if (current && current.nom) pharmacies.push(current);
+
+  return pharmacies.map((ph, i) => ({
+    id: generateId(ph.nom, villeSlug, ph.adresse),
+    nom: ph.nom,
+    adresse: ph.adresse.trim() || 'Adresse non précisée',
+    quartier: ph.adresse.trim() || 'Non précisé',
+    ville: villeNom,
+    region: regionName,
+    tel: ph.tel.length ? [...new Set(ph.tel)].join(' / ') : 'Non listé',
+    en_garde: true,
+    horaires: periode,
+    services: ['Urgences', 'Médicaments', 'Conseil pharmaceutique'],
+    note: (3.5 + Math.random() * 1.5).toFixed(1),
+    coordinates: getCoordinates(villeSlug),
+    source: 'Annuaire-Médical',
+    source_url: url,
+    scraped_at: new Date().toISOString()
+  }));
+}
+
+// ============================================
+// SCRAPING PRINCIPAL
+// ============================================
+
+export async function scrapeAnnuaireMedical() {
+  console.log('📡 Scraping Annuaire Médical (ULTIME PRO)...');
+
+  const allPharmacies = [];
+
+  for (const [regionSlug, villes] of Object.entries(REGIONS_VILLES)) {
+    const regionName = REGION_NAMES[regionSlug];
+
+    for (const villeSlug of villes) {
+      const url = `https://www.annuaire-medical.cm/fr/pharmacies-de-garde/${regionSlug}/pharmacies-de-garde-${villeSlug}`;
+
+      console.log(`📍 ${regionName} → ${villeSlug}`);
+
+      try {
+        const { data } = await axios.get(url, {
+          timeout: 15000,
+          headers: { 
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
+            'Accept': 'text/html,application/xhtml+xml'
+          }
+        });
+
+        const pharmaciesVille = extractPharmacies(
+          data,
+          regionSlug,
+          regionName,
+          villeSlug,
+          url
+        );
+
+        if (pharmaciesVille.length === 0) {
+          console.log(`   ⚠️ Aucune pharmacie détectée`);
+          if (process.env.DEBUG === 'true') {
+            fs.writeFileSync(`debug-${regionSlug}-${villeSlug}.html`, data);
+          }
+        }
+
+        console.log(`   ✅ ${pharmaciesVille.length} pharmacies`);
+        allPharmacies.push(...pharmaciesVille);
+
+        await new Promise(r => setTimeout(r, 1500));
+
+      } catch (error) {
+        console.log(`   ❌ ${error.message}`);
+      }
+    }
+  }
+
+  // ✅ Déduplication finale (par sécurité)
+  const unique = new Map();
+  for (const ph of allPharmacies) {
+    if (!unique.has(ph.id)) {
+      unique.set(ph.id, ph);
+    }
+  }
+
+  const finalList = Array.from(unique.values());
+
+  console.log(`\n🎉 TOTAL → ${finalList.length} pharmacies (${allPharmacies.length} avant déduplication)`);
+
+  return {
+    pharmacies: finalList,
+    periode: `Garde du ${new Date().toLocaleDateString('fr-FR')}`
+  };
 }
